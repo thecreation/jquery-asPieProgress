@@ -1,0 +1,45 @@
+{
+  "name": "jquery-asPieProgress",
+  "title": "jQuery asPieProgress",
+  "description": "A jQuery plugin that animate the progress bar",
+  "version": "0.1.0",
+  "homepage": "https://github.com/amazingSurge/jquery-asPieProgress",
+  "author": {
+    "name": "amazingSurge",
+    "email": "amazingSurge@yahoo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:amazingSurge/jquery-asPieProgress.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amazingSurge/jquery-asPieProgress/issues"
+  },
+  "licenses": [
+    {
+      "type": "GPL",
+      "url": "https://github.com/amazingSurge/jquery-asPieProgress/blob/master/LICENSE-GPL"
+    }
+  ],
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-contrib-csslint": "*",
+    "grunt-contrib-compress": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-less": "*",
+    "grunt-csscomb": "*",
+    "load-grunt-tasks": "*",
+    "grunt-jsbeautifier": "*",
+    "grunt-text-replace": "*",
+    "grunt-autoprefixer": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*"
+  },
+  "dependencies": {
+    "grunt-jquery-builder": "*"
+  }
+}

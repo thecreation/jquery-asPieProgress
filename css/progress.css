@@ -1,0 +1,48 @@
+.progress {
+  height: 1.2rem;
+  padding: 1px;
+  background-color: #f7f7f7;
+  border: 1px solid #eeeeee;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.progress__meter {
+  display: block;
+  height: 100%;
+  background: #5bc0de;
+  -webkit-transition: width 0.5s ease;
+       -o-transition: width 0.5s ease;
+          transition: width 0.5s ease;
+}
+.progress__label {
+  float: right;
+  padding: 0 5px;
+  color: #ffffff;
+  font-size: 12px;
+}
+.progress--radius {
+  border-radius: 2px;
+}
+.progress--round {
+  border-radius: 1000px;
+}
+.progress--radius .progress__meter,
+.progress--round .progress__meter {
+  border-radius: inherit;
+}
+.progress--small {
+  height: 0.8rem;
+}
+.progress--large {
+  height: 1.5rem;
+}
+.progress--success .progress__meter {
+  background-color: #43ac6a;
+}
+.progress--alert .progress__meter {
+  background-color: #f04124;
+}
+.progress--striped .progress__meter {
+  -webkit-background-size: 40px 40px;
+          background-size: 40px 40px;
+}

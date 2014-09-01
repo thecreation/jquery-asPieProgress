@@ -1,0 +1,6 @@
+{
+  "extends" : "src/.jshintrc",
+  "browser" : false,
+  "es3"     : false,
+  "node"    : true
+}
