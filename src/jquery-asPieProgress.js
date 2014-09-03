@@ -8,6 +8,17 @@
 (function($, document, window, undefined) {
     "use strict";
 
+    var svgElement = function(tag, attrs) {
+        var elem = document.createElementNS("http://www.w3.org/2000/svg", tag);
+
+        $.each(attrs, function(name, value) {
+            elem.setAttribute(name, value);
+        });
+
+        return elem;
+    }
+    var svgSupported = "createElementNS" in document && svgElement("svg", {}).createSVGRect;
+
     function isPercentage(n) {
         return typeof n === 'string' && n.indexOf('%') != -1;
     }
@@ -48,6 +59,8 @@
         step: 1,
         speed: 50, // refresh speed
         delay: 300,
+        stroke: '#ff9900',
+        strokeWidth: '4',
         label: function(n) {
             var percentage = this.getPercentage(n);
             return percentage + '%';
@@ -59,10 +72,56 @@
         init: function() {
             this.$meter = this.$element.find('.' + this.classes.meter);
             this.$label = this.$element.find('.' + this.classes.label);
-
+            this.width = this.$meter.width();
+            this.height = this.$meter.height();
+            this.prepare();
             this.reset();
             this.initialized = true;
             this._trigger('ready');
+        },
+        prepare: function() {
+            this.svg = new svgElement("svg", {
+                "width": this.width,
+                "height": this.height
+            });
+
+            this.$meter.append(this.svg);
+            this.build();
+        },
+        build: function() {
+            var width = this.width,
+                height = this.height,
+                cx = width / 2,
+                cy = height / 2,
+                start_angle = 0;
+
+            var r = Math.min(cx, cy) - this.options.strokeWidth;
+            var percentage = this.getPercentage(this.goal);
+            var end_angle = start_angle + percentage * Math.PI * 2/100;
+
+            var x1 = cx + r * Math.sin(start_angle),
+                y1 = cy - r * Math.cos(start_angle),
+                x2 = cx + r * Math.sin(end_angle),
+                y2 = cy - r * Math.cos(end_angle);
+
+            // This is a flag for angles larger than than a half circle
+            // It is required by the SVG arc drawing component
+            var big = 0;
+            if (end_angle - start_angle > Math.PI) big = 1;
+
+            // This string holds the path details
+            var d = "M" + x1 + "," + y1 +     // Start at (x1,y1)
+                " A" + r + "," + r +       // Draw an arc of radius r
+                " 0 " + big + " 1 " +      // Arc details...
+                x2 + "," + y2;
+
+            var path = svgElement("path", {
+                d: d
+            });
+            path.setAttribute("stroke", this.options.stroke);
+            path.setAttribute("fill", 'transparent');
+            path.setAttribute("stroke-width", this.options.strokeWidth);
+            this.svg.appendChild(path);
         },
         _trigger: function(eventType) {
             var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined,
@@ -146,11 +205,11 @@
             this.now = n;
 
             var percenage = this.getPercentage(this.now);
-            this.$meter.css('width', percenage + '%');
+            // this.$meter.css('width', percenage + '%');
             this.$element.attr('aria-valuenow', this.now);
-            if (typeof this.options.label === 'function') {
-                this.$label.html(this.options.label.call(this, [this.now]));
-            }
+            // if (typeof this.options.label === 'function') {
+            //     this.$label.html(this.options.label.call(this, [this.now]));
+            // }
 
             this._trigger('update', n);
         },
