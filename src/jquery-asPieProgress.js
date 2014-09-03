@@ -59,7 +59,8 @@
         step: 1,
         speed: 50, // refresh speed
         delay: 300,
-        stroke: '#ff9900',
+        barColor: '#ef1e25',
+        trackColor: '#f2f2f2',
         strokeWidth: '4',
         label: function(n) {
             var percentage = this.getPercentage(n);
@@ -88,14 +89,40 @@
             this.$meter.append(this.svg);
             this.build();
         },
-        build: function() {
+        build: function(){
+            this.buildTrack();
+            this.buildBar();
+        },
+        buildTrack: function(){
+            var width = this.width,
+                height = this.height,
+                cx = width / 2,
+                cy = height / 2;
+
+            var strokeWidth = this.options.strokeWidth;
+
+            var ellipse = svgElement("ellipse", {
+                rx: cx - strokeWidth/2,
+                ry: cy - strokeWidth/2,
+                cx: cx,
+                cy: cy,
+                stroke: this.options.trackColor,
+                fill: 'none',
+                'stroke-width': strokeWidth
+            });
+            
+            this.svg.appendChild(ellipse);
+        },
+        buildBar: function() {
             var width = this.width,
                 height = this.height,
                 cx = width / 2,
                 cy = height / 2,
                 start_angle = 0;
 
-            var r = Math.min(cx, cy) - this.options.strokeWidth;
+            var strokeWidth = this.options.strokeWidth;
+
+            var r = Math.min(cx, cy) - strokeWidth/2;
             var percentage = this.getPercentage(this.goal);
             var end_angle = start_angle + percentage * Math.PI * 2/100;
 
@@ -116,11 +143,11 @@
                 x2 + "," + y2;
 
             var path = svgElement("path", {
-                d: d
+                d: d,
+                fill: 'none',
+                'stroke-width': strokeWidth,
+                stroke: this.options.barColor
             });
-            path.setAttribute("stroke", this.options.stroke);
-            path.setAttribute("fill", 'transparent');
-            path.setAttribute("stroke-width", this.options.strokeWidth);
             this.svg.appendChild(path);
         },
         _trigger: function(eventType) {
