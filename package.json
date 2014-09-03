@@ -26,8 +26,6 @@
     "grunt-contrib-concat": "*",
     "grunt-contrib-clean": "*",
     "grunt-contrib-cssmin": "*",
-    "grunt-contrib-csslint": "*",
-    "grunt-contrib-compress": "*",
     "grunt-contrib-watch": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-less": "*",

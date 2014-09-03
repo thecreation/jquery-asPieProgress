@@ -1,48 +1,41 @@
-.progress {
-  height: 1.2rem;
-  padding: 1px;
-  background-color: #f7f7f7;
-  border: 1px solid #eeeeee;
-  overflow: hidden;
-  margin-bottom: 20px;
+.pie_progress span {
+  font-size: 22px;
 }
-.progress__meter {
-  display: block;
-  height: 100%;
-  background: #5bc0de;
-  -webkit-transition: width 0.5s ease;
-       -o-transition: width 0.5s ease;
-          transition: width 0.5s ease;
+.pie_progress__icon {
+  font-size: 48px;
+  color: #bbb;
+  vertical-align: middle;
 }
-.progress__label {
-  float: right;
-  padding: 0 5px;
-  color: #ffffff;
-  font-size: 12px;
+.pie_progress__graphy {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+  font-size: 28px;
+  line-height: 150px;
+  position: relative;
+  text-align: center;
 }
-.progress--radius {
-  border-radius: 2px;
+.pie_progress--small span {
+  font-size: 18px;
 }
-.progress--round {
-  border-radius: 1000px;
+.pie_progress--small .pie_progress__icon {
+  font-size: 38px;
 }
-.progress--radius .progress__meter,
-.progress--round .progress__meter {
-  border-radius: inherit;
+.pie_progress--small .pie_progress__graphy {
+  width: 120px;
+  height: 120px;
+  font-size: 22px;
+  line-height: 120px;
 }
-.progress--small {
-  height: 0.8rem;
+.pie_progress--large span {
+  font-size: 28px;
 }
-.progress--large {
-  height: 1.5rem;
+.pie_progress--large .pie_progress__icon {
+  font-size: 60px;
 }
-.progress--success .progress__meter {
-  background-color: #43ac6a;
-}
-.progress--alert .progress__meter {
-  background-color: #f04124;
-}
-.progress--striped .progress__meter {
-  -webkit-background-size: 40px 40px;
-          background-size: 40px 40px;
+.pie_progress--large .pie_progress__graphy {
+  width: 180px;
+  height: 180px;
+  font-size: 34px;
+  line-height: 180px;
 }

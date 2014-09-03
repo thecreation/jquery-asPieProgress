@@ -20,24 +20,17 @@
 </head>
 <body>
     <section>
-        <h2>PieProgress Bars</h2>
+        <h2>PieProgress</h2>
         <section>
             <div class="row">
-                <div class="example">
-                    <h4>HTML</h4>
-                    <pre><code data-language="html"></code></pre>
+                <div class="pie_progress" role="progressbar" data-goal="30">
+                    <div class="pie_progress__graphy"><span>A</span></div>
                 </div>
-                <div class="show">
-                    <h4>RENDERED HTML</h4>
-                    <div class="progress" role="progressbar" data-goal="30">
-                        <div class="progress__meter" style="width: 30%"></div>
-                    </div>
-                    <div class="progress" role="progressbar" data-goal="180" aria-valuemin="20" data-step="7" aria-valuemax="200">
-                        <div class="progress__meter"><span class="progress__label"></span></div>
-                    </div>
-                    <div class="progress" role="progressbar" data-goal="50" aria-valuemin="0" aria-valuemax="100">
-                        <div class="progress__meter" style="width: 50%"></div>
-                    </div>
+                <div class="pie_progress" role="progressbar" data-goal="180" aria-valuemin="20" data-step="7" aria-valuemax="200">
+                    <div class="pie_progress__graphy"><i class="icon fa-bell">A</span></div>
+                </div>
+                <div class="pie_progress" role="progressbar" data-goal="50" aria-valuemin="0" aria-valuemax="100">
+                    <div class="pie_progress__graphy"><span></span></div>
                 </div>
                 <div>
                     <button id="button_start">start()</button>
@@ -56,27 +49,27 @@
     <script type="text/javascript" src="../src/jquery-asPieProgress.js"></script>
     <script type="text/javascript">
     jQuery(document).ready(function($){
-        $('.progress').asPieProgress({
-            'namespace': 'progress'
+        $('.pie_progress').asPieProgress({
+            'namespace': 'pie_progress'
         });
 
         $('#button_start').on('click', function(){
-            $('.progress').asPieProgress('start');
+            $('.pie_progress').asPieProgress('start');
         });
         $('#button_done').on('click', function(){
-             $('.progress').asPieProgress('done');
+             $('.pie_progress').asPieProgress('done');
         });
         $('#button_go').on('click', function(){
-             $('.progress').asPieProgress('go',50);
+             $('.pie_progress').asPieProgress('go',50);
         });
         $('#button_go_percentage').on('click', function(){
-            $('.progress').asPieProgress('go','50%');
+            $('.pie_progress').asPieProgress('go','50%');
         });
         $('#button_stop').on('click', function(){
-            $('.progress').asPieProgress('stop');
+            $('.pie_progress').asPieProgress('stop');
         });
         $('#button_reset').on('click', function(){
-            $('.progress').asPieProgress('reset');
+            $('.pie_progress').asPieProgress('reset');
         });
     });
     </script>
