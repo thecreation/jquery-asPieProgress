@@ -1,49 +1,25 @@
-.pie_progress span {
-  font-size: 22px;
-}
-.pie_progress__icon {
-  font-size: 48px;
-  color: #bbb;
-  vertical-align: middle;
+.pie_progress {
+  text-align: center;
+  position: relative;
+  transform-style: preserve-3d;
 }
 .pie_progress svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-.pie_progress svg path {
-  transition: stroke-dashoffset 0.1s ease;
-}
-.pie_progress__meter {
-  width: 150px;
-  height: 150px;
   margin: 0 auto;
-  font-size: 28px;
-  line-height: 150px;
-  position: relative;
-  text-align: center;
 }
-.pie_progress--small span {
-  font-size: 18px;
+.pie_progress__content,
+.pie_progress__number,
+.pie_progress__label,
+.pie_progress__icon {
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
 }
-.pie_progress--small .pie_progress__icon {
-  font-size: 38px;
+.pie_progress__number {
+  font-size: 42px;
 }
-.pie_progress--small .pie_progress__meter {
-  width: 120px;
-  height: 120px;
-  font-size: 22px;
-  line-height: 120px;
-}
-.pie_progress--large span {
-  font-size: 28px;
-}
-.pie_progress--large .pie_progress__icon {
-  font-size: 60px;
-}
-.pie_progress--large .pie_progress__meter {
-  width: 180px;
-  height: 180px;
-  font-size: 34px;
-  line-height: 180px;
+.pie_progress__label {
+  margin-top: 32px;
+  font-size: 12px;
 }

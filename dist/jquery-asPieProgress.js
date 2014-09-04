@@ -1,10 +1,6 @@
-/*
- * jquery-asPieProgress
- * https://github.com/amazingSurge/jquery-asPieProgress
- *
- * Copyright (c) 2014 amazingSurge
- * Licensed under the GPL license.
- */
+/*! jQuery asPieProgress - v0.1.0 - 2014-09-04
+* https://github.com/amazingSurge/jquery-asPieProgress
+* Copyright (c) 2014 amazingSurge; Licensed GPL */
 (function($, document, window, undefined) {
     "use strict";
     
