@@ -55,10 +55,6 @@
     var pluginName = 'asPieProgress';
 
     var Plugin = $[pluginName] = function(element, options) {
-        if(!svgSupported) {
-            return;
-        }
-
         this.element = element;
         this.$element = $(element);
 
@@ -117,6 +113,16 @@
             this.width = this.size;
             this.height = this.size;
         
+            this.prepare();
+
+            this.initialized = true;
+            this._trigger('ready');
+        },
+        prepare: function() {
+            if(!svgSupported) {
+                return;
+            }
+
             this.svg = new SvgElement("svg", {
                 "width": this.width,
                 "height": this.height
@@ -126,9 +132,6 @@
             this.buildBar();
 
             this.$element.append(this.svg);
-
-            this.initialized = true;
-            this._trigger('ready');
         },
         buildTrack: function(){
             var width = this.size,
@@ -151,6 +154,10 @@
             this.svg.appendChild(ellipse);
         },
         buildBar: function() {
+            if(!svgSupported) {
+                return;
+            }
+
             var path = new SvgElement("path", {
                 fill: 'none',
                 'stroke-width': this.options.barsize,
@@ -163,6 +170,10 @@
             this._updateBar();
         },
         _drawBar: function(n) {
+            if(!svgSupported) {
+                return;
+            }
+
             this.bar_goal = n;
             var width = this.size,
                 height = this.size,
@@ -200,6 +211,9 @@
             this.bar.setAttribute("d", d);
         },
         _updateBar: function() {
+            if(!svgSupported) {
+                return;
+            }
             var percenage = this.getPercentage(this.now);
 
             var length = this.bar.getTotalLength();
@@ -341,7 +355,7 @@
     $.fn[pluginName] = function(options) {
         if (typeof options === 'string') {
             var method = options;
-            var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined;
+            var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
 
             if (/^\_/.test(method)) {
                 return false;
