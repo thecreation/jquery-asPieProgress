@@ -123,6 +123,7 @@
             var strokeWidth = this.options.strokeWidth;
 
             var r = Math.min(cx, cy) - strokeWidth/2;
+            this.r = r;
             var percentage = this.getPercentage(this.goal);
             var end_angle = start_angle + percentage * Math.PI * 2/100;
 
@@ -148,7 +149,13 @@
                 'stroke-width': strokeWidth,
                 stroke: this.options.barColor
             });
+            this.bar = path;
             this.svg.appendChild(path);
+
+            // var length = path.getTotalLength();
+
+            // path.setAttribute("stroke-dasharray", length + " " + length);
+            // path.setAttribute("stroke-dashoffset", length);
         },
         _trigger: function(eventType) {
             var method_arguments = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : undefined,
@@ -194,7 +201,7 @@
                 goal = this.min;
             }
 
-
+            console.info(goal);
             setTimeout(function() {
                 self._interval = setInterval(function() {
                     var distance = goal - self.now,
@@ -232,6 +239,12 @@
             this.now = n;
 
             var percenage = this.getPercentage(this.now);
+
+            var length = this.bar.getTotalLength();
+            var offset = length *( 1 - percenage/this.getPercentage(this.goal));
+            this.bar.style.strokeDasharray = length + " " + length;
+            this.bar.style.strokeDashoffset = offset;
+
             // this.$meter.css('width', percenage + '%');
             this.$element.attr('aria-valuenow', this.now);
             // if (typeof this.options.label === 'function') {
