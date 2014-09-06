@@ -224,11 +224,10 @@
         },
         _trigger: function(eventType) {
             var method_arguments = Array.prototype.slice.call(arguments, 1),
-                data = method_arguments.concat([this]);
+                data = [this].concat(method_arguments);
             
             // event
             this.$element.trigger(pluginName + '::' + eventType, data);
-            this.$element.trigger(eventType + '.' + pluginName, data);
 
             // callback
             eventType = eventType.replace(/\b\w+\b/g, function(word) {
