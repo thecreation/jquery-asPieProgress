@@ -7,26 +7,29 @@
  */
 (function($, document, window, undefined) {
     "use strict";
-    
-    if (!Date.now){
-        Date.now = function() { return new Date().getTime(); };
+
+    if (!Date.now) {
+        Date.now = function() {
+            return new Date().getTime();
+        };
     }
 
     var vendors = ['webkit', 'moz'];
     for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
         var vp = vendors[i];
-        window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
-                                   || window[vp+'CancelRequestAnimationFrame']);
+        window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = (window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame']);
     }
-    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
+    if (/iP(ad|hone|od).*OS (6|7)/.test(window.navigator.userAgent) // iOS6 is buggy
         || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
         var lastTime = 0;
         window.requestAnimationFrame = function(callback) {
             var now = Date.now();
             var nextTime = Math.max(lastTime + 16, now);
-            return setTimeout(function() { callback(lastTime = nextTime); },
-                              nextTime - now);
+            return setTimeout(function() {
+                    callback(lastTime = nextTime);
+                },
+                nextTime - now);
         };
         window.cancelAnimationFrame = clearTimeout;
     }
@@ -45,8 +48,8 @@
         return typeof n === 'string' && n.indexOf('%') != -1;
     }
 
-    function getTime(){
-        if (window.performance.now) {
+    function getTime() {
+        if (typeof window.performance !== 'undefined' && window.performance.now) {
             return window.performance.now();
         } else {
             return Date.now();
@@ -66,17 +69,17 @@
             content: this.namespace + '__content'
         };
         this.$element.addClass(this.namespace);
-    
+
         this.min = this.$element.attr('aria-valuemin');
         this.max = this.$element.attr('aria-valuemax');
-        this.min = this.min? parseInt(this.min, 10): this.options.min;
-        this.max = this.max? parseInt(this.max, 10): this.options.max;
+        this.min = this.min ? parseInt(this.min, 10) : this.options.min;
+        this.max = this.max ? parseInt(this.max, 10) : this.options.max;
         this.first = this.$element.attr('aria-valuenow');
-        this.first = this.first? parseInt(this.first, 10): this.min;
+        this.first = this.first ? parseInt(this.first, 10) : this.min;
 
         this.now = this.first;
         this.goal = this.options.goal;
-        
+
         this._frameId = null;
 
         this.initialized = false;
@@ -112,14 +115,14 @@
             this.size = this.options.size;
             this.width = this.size;
             this.height = this.size;
-        
+
             this.prepare();
 
             this.initialized = true;
             this._trigger('ready');
         },
         prepare: function() {
-            if(!svgSupported) {
+            if (!svgSupported) {
                 return;
             }
 
@@ -133,7 +136,7 @@
 
             this.$element.append(this.svg);
         },
-        buildTrack: function(){
+        buildTrack: function() {
             var width = this.size,
                 height = this.size,
                 cx = width / 2,
@@ -142,19 +145,19 @@
             var barsize = this.options.barsize;
 
             var ellipse = new SvgElement("ellipse", {
-                rx: cx - barsize/2,
-                ry: cy - barsize/2,
+                rx: cx - barsize / 2,
+                ry: cy - barsize / 2,
                 cx: cx,
                 cy: cy,
                 stroke: this.options.trackcolor,
                 fill: this.options.fillcolor,
                 'stroke-width': barsize
             });
-            
+
             this.svg.appendChild(ellipse);
         },
         buildBar: function() {
-            if(!svgSupported) {
+            if (!svgSupported) {
                 return;
             }
 
@@ -170,7 +173,7 @@
             this._updateBar();
         },
         _drawBar: function(n) {
-            if(!svgSupported) {
+            if (!svgSupported) {
                 return;
             }
 
@@ -183,14 +186,14 @@
 
             var barsize = this.options.barsize;
 
-            var r = Math.min(cx, cy) - barsize/2;
+            var r = Math.min(cx, cy) - barsize / 2;
             this.r = r;
             var percentage = this.getPercentage(n);
 
-            if(percentage === 100){
+            if (percentage === 100) {
                 percentage -= 0.0001;
             }
-            var end_angle = start_angle + percentage * Math.PI * 2/100;
+            var end_angle = start_angle + percentage * Math.PI * 2 / 100;
 
             var x1 = cx + r * Math.sin(start_angle),
                 y1 = cy - r * Math.cos(start_angle),
@@ -203,21 +206,21 @@
             if (end_angle - start_angle > Math.PI) big = 1;
 
             // This string holds the path details
-            var d = "M" + x1 + "," + y1 +     // Start at (x1,y1)
-                " A" + r + "," + r +       // Draw an arc of radius r
-                " 0 " + big + " 1 " +      // Arc details...
+            var d = "M" + x1 + "," + y1 + // Start at (x1,y1)
+                " A" + r + "," + r + // Draw an arc of radius r
+                " 0 " + big + " 1 " + // Arc details...
                 x2 + "," + y2;
 
             this.bar.setAttribute("d", d);
         },
         _updateBar: function() {
-            if(!svgSupported) {
+            if (!svgSupported) {
                 return;
             }
             var percenage = this.getPercentage(this.now);
 
             var length = this.bar.getTotalLength();
-            var offset = length *( 1 - percenage/this.getPercentage(this.bar_goal));
+            var offset = length * (1 - percenage / this.getPercentage(this.bar_goal));
 
             this.bar.style.strokeDasharray = length + " " + length;
             this.bar.style.strokeDashoffset = offset;
@@ -225,7 +228,7 @@
         _trigger: function(eventType) {
             var method_arguments = Array.prototype.slice.call(arguments, 1),
                 data = [this].concat(method_arguments);
-            
+
             // event
             this.$element.trigger(pluginName + '::' + eventType, data);
 
@@ -259,24 +262,24 @@
                 goal = this.min;
             }
 
-            if(this.bar_goal < goal){
+            if (this.bar_goal < goal) {
                 this._drawBar(goal);
             }
 
             var start = self.now;
             var startTime = getTime();
-            var animation = function(time){
-                var distance = (time - startTime)/self.options.speed;
-                var next = Math.round(distance/100 * (self.max - self.min));
+            var animation = function(time) {
+                var distance = (time - startTime) / self.options.speed;
+                var next = Math.round(distance / 100 * (self.max - self.min));
 
-                if(goal > start){
+                if (goal > start) {
                     next = start + next;
-                    if(next > goal){
+                    if (next > goal) {
                         next = goal;
                     }
-                } else{
+                } else {
                     next = start - next;
-                    if(next < goal){
+                    if (next < goal) {
                         next = goal;
                     }
                 }
@@ -290,11 +293,11 @@
                         self._trigger('finish');
                     }
                 } else {
-                    self._frameId =  window.requestAnimationFrame(animation);
+                    self._frameId = window.requestAnimationFrame(animation);
                 }
             };
 
-            self._frameId =  window.requestAnimationFrame(animation);
+            self._frameId = window.requestAnimationFrame(animation);
         },
         _update: function(n) {
             this.now = n;
