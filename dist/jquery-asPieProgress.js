@@ -1,4 +1,4 @@
-/*! jQuery asPieProgress - v0.1.0 - 2014-09-18
+/*! jQuery asPieProgress - v0.1.0 - 2014-11-21
 * https://github.com/amazingSurge/jquery-asPieProgress
 * Copyright (c) 2014 amazingSurge; Licensed GPL */
 (function($, document, window, undefined) {
@@ -8,6 +8,14 @@
         Date.now = function() {
             return new Date().getTime();
         };
+    }
+
+    function getTime() {
+        if (typeof window.performance !== 'undefined' && window.performance.now) {
+            return window.performance.now();
+        } else {
+            return Date.now();
+        }
     }
 
     var vendors = ['webkit', 'moz'];
@@ -20,7 +28,7 @@
         || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
         var lastTime = 0;
         window.requestAnimationFrame = function(callback) {
-            var now = Date.now();
+            var now = getTime();
             var nextTime = Math.max(lastTime + 16, now);
             return setTimeout(function() {
                     callback(lastTime = nextTime);
@@ -44,13 +52,6 @@
         return typeof n === 'string' && n.indexOf('%') != -1;
     }
 
-    function getTime() {
-        if (typeof window.performance !== 'undefined' && window.performance.now) {
-            return window.performance.now();
-        } else {
-            return Date.now();
-        }
-    }
     var pluginName = 'asPieProgress';
 
     var Plugin = $[pluginName] = function(element, options) {
