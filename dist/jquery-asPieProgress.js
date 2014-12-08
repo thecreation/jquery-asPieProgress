@@ -321,9 +321,7 @@
             var startTime = getTime();
             var animation = function(time) {
                 var distance = (time - startTime) / self.options.speed;
-
-
-                // current percent, current duration, beginning in value, change in vlaue, duration
+                
                 var next = Math.round(self.easing.fn(distance/100) * (self.max - self.min));
 
                 if (goal > start) {
