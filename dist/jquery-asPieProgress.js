@@ -1,4 +1,4 @@
-/*! jQuery asPieProgress - v0.2.0 - 2015-02-23
+/*! jQuery asPieProgress - v0.3.0 - 2015-02-23
 * https://github.com/amazingSurge/jquery-asPieProgress
 * Copyright (c) 2015 amazingSurge; Licensed GPL */
 // Resources:
