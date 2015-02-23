@@ -42,6 +42,11 @@
                     <button id="button_reset">reset()</button>
                 </div>
             </div>
+            <div class="row">
+                <div class="pie_progress--slow" role="progressbar">
+                    <span class="pie_progress__number">0%</span>
+                </div>
+            </div>
         </section>
     </section>
 
@@ -70,6 +75,16 @@
         });
         $('#button_reset').on('click', function(){
             $('.pie_progress').asPieProgress('reset');
+        });
+
+        // Example with grater loading time - loads longer
+        $('.pie_progress--slow').asPieProgress({
+            'namespace': 'pie_progress',
+             goal: 1000,
+             min: 0,
+             max: 1000,
+             speed: 200,
+             easing: 'linear'
         });
     });
     </script>
