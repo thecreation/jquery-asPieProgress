@@ -103,7 +103,7 @@
         fillcolor: 'none',
         easing: 'ease',
         numberCallback: function(n) {
-            var percentage = this.getPercentage(n);
+            var percentage = Math.round(this.getPercentage(n));
             return percentage + '%';
         },
         contentCallback: null
@@ -296,8 +296,9 @@
                 this.options[onFunction].apply(this, method_arguments);
             }
         },
+        // Return the percentage based on the current step
         getPercentage: function(n) {
-            return Math.round(100 * (n - this.min) / (this.max - this.min));
+            return 100 * (n - this.min) / (this.max - this.min);
         },
         go: function(goal) {
             var self = this;
