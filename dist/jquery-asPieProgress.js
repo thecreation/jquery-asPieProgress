@@ -1,10 +1,8 @@
-/*! jQuery asPieProgress - v0.3.0 - 2015-02-23
+/*! jQuery asPieProgress - v0.3.0 - 2015-02-24
 * https://github.com/amazingSurge/jquery-asPieProgress
 * Copyright (c) 2015 amazingSurge; Licensed GPL */
-// Resources:
-// - [AMD wrapper](https://github.com/umdjs/umd/blob/master/jqueryPlugin.js)
-
 (function (factory) {
+    "use strict";
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module depending on jQuery.
         define(['jquery'], factory);
@@ -76,7 +74,7 @@
             number: this.namespace + '__number',
             content: this.namespace + '__content'
         };
-        this.easing = Plugin.easing[this.options.easing] || Plugin.easing["ease"];
+        this.easing = Plugin.easing[this.options.easing] || Plugin.easing.ease;
         this.$element.addClass(this.namespace);
 
         this.min = this.$element.attr('aria-valuemin');
@@ -110,7 +108,7 @@
         fillcolor: 'none',
         easing: 'ease',
         numberCallback: function(n) {
-            var percentage = this.getPercentage(n);
+            var percentage = Math.round(this.getPercentage(n));
             return percentage + '%';
         },
         contentCallback: null
@@ -303,8 +301,9 @@
                 this.options[onFunction].apply(this, method_arguments);
             }
         },
+        // Return the percentage based on the current step
         getPercentage: function(n) {
-            return Math.round(100 * (n - this.min) / (this.max - this.min));
+            return 100 * (n - this.min) / (this.max - this.min);
         },
         go: function(goal) {
             var self = this;

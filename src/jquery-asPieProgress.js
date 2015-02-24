@@ -2,14 +2,12 @@
  * jquery-asPieProgress
  * https://github.com/amazingSurge/jquery-asPieProgress
  *
- * Copyright (c) 2014 amazingSurge
+ * Copyright (c) 2015 amazingSurge
  * Licensed under the GPL license.
  */
 
-// Resources:
-// - [AMD wrapper](https://github.com/umdjs/umd/blob/master/jqueryPlugin.js)
-
 (function (factory) {
+    "use strict";
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module depending on jQuery.
         define(['jquery'], factory);
@@ -81,7 +79,7 @@
             number: this.namespace + '__number',
             content: this.namespace + '__content'
         };
-        this.easing = Plugin.easing[this.options.easing] || Plugin.easing["ease"];
+        this.easing = Plugin.easing[this.options.easing] || Plugin.easing.ease;
         this.$element.addClass(this.namespace);
 
         this.min = this.$element.attr('aria-valuemin');

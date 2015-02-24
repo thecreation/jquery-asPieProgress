@@ -10,7 +10,8 @@
   "laxbreak" : true,
   "nonbsp"   : true,
   "strict"   : true,
+  "newcap"   : false,
   "undef"    : true,
   "unused"   : true,
-  "predef": ["jQuery"]
+  "predef": ["jQuery","define"]
 }
