@@ -1,4 +1,4 @@
-/*! jQuery asPieProgress - v0.3.0 - 2015-02-24
+/*! jQuery asPieProgress - v0.3.1 - 2015-03-05
 * https://github.com/amazingSurge/jquery-asPieProgress
 * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function (factory) {
@@ -82,8 +82,7 @@
         this.min = this.min ? parseInt(this.min, 10) : this.options.min;
         this.max = this.max ? parseInt(this.max, 10) : this.options.max;
         this.first = this.$element.attr('aria-valuenow');
-        this.first = this.first ? parseInt(this.first, 10) : this.min;
-
+        this.first = this.first ? parseInt(this.first, 10) : (this.options.first? this.options.first: this.min);
         this.now = this.first;
         this.goal = this.options.goal;
 
@@ -229,7 +228,7 @@
             this.bar = path;
             this.svg.appendChild(path);
 
-            this._drawBar(this.goal);
+            this._drawBar(this.first);
             this._updateBar();
         },
         _drawBar: function(n) {
@@ -391,7 +390,7 @@
         },
         reset: function() {
             this._clear();
-            this._drawBar(this.goal);
+            this._drawBar(this.first);
             this._update(this.first);
             this._trigger('reset');
         },
