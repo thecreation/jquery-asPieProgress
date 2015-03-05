@@ -36,7 +36,7 @@
                 <div class="pie_progress--slow" role="progressbar">
                     <span class="pie_progress__number">0%</span>
                 </div>
-                <div class="pie_progress--countdown" role="progressbar" data-goal="0" aria-valuemin="0" aria-valuemax="120" aria-valuenow="120">
+                <div class="pie_progress--countdown" role="progressbar">
                     <span class="pie_progress__number">2: 00</span>
                 </div>
                 <div>
@@ -74,6 +74,9 @@
         $('.pie_progress--countdown').asPieProgress({
             namespace: 'pie_progress',
             easing: 'linear',
+            first: 120,
+            max: 120,
+            goal: 0,
             speed: 1200, // 120 s * 1000 ms per s / 100
             numberCallback: function(n){
                 var minutes = Math.floor(this.now/60);
