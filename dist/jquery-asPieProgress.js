@@ -1,7 +1,7 @@
-/*! jQuery asPieProgress - v0.3.1 - 2015-03-05
+/*! jQuery asPieProgress - v0.3.1 - 2015-04-03
 * https://github.com/amazingSurge/jquery-asPieProgress
 * Copyright (c) 2015 amazingSurge; Licensed GPL */
-(function (factory) {
+(function(factory) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module depending on jQuery.
@@ -10,7 +10,7 @@
         // No AMD. Register plugin with global jQuery object.
         factory(jQuery);
     }
-}(function ($) {
+}(function($) {
     "use strict";
 
     if (!Date.now) {
@@ -82,7 +82,7 @@
         this.min = this.min ? parseInt(this.min, 10) : this.options.min;
         this.max = this.max ? parseInt(this.max, 10) : this.options.max;
         this.first = this.$element.attr('aria-valuenow');
-        this.first = this.first ? parseInt(this.first, 10) : (this.options.first? this.options.first: this.min);
+        this.first = this.first ? parseInt(this.first, 10) : (this.options.first ? this.options.first : this.min);
         this.now = this.first;
         this.goal = this.options.goal;
 
@@ -113,44 +113,52 @@
         contentCallback: null
     };
 
-    var easingBezier = function (mX1, mY1, mX2, mY2) {    
-        function A(aA1, aA2) { return 1.0 - 3.0 * aA2 + 3.0 * aA1; }
-        function B(aA1, aA2) { return 3.0 * aA2 - 6.0 * aA1; }
-        function C(aA1)      { return 3.0 * aA1; }
-       
+    var easingBezier = function(mX1, mY1, mX2, mY2) {
+        function A(aA1, aA2) {
+            return 1.0 - 3.0 * aA2 + 3.0 * aA1;
+        }
+
+        function B(aA1, aA2) {
+            return 3.0 * aA2 - 6.0 * aA1;
+        }
+
+        function C(aA1) {
+            return 3.0 * aA1;
+        }
+
         // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
         function CalcBezier(aT, aA1, aA2) {
-          return ((A(aA1, aA2)*aT + B(aA1, aA2))*aT + C(aA1))*aT;
+            return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
         }
-       
+
         // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
         function GetSlope(aT, aA1, aA2) {
-          return 3.0 * A(aA1, aA2)*aT*aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
+            return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
         }
-       
+
         function GetTForX(aX) {
-          // Newton raphson iteration
-          var aGuessT = aX;
-          for (var i = 0; i < 4; ++i) {
-            var currentSlope = GetSlope(aGuessT, mX1, mX2);
-            if (currentSlope === 0.0) return aGuessT;
-            var currentX = CalcBezier(aGuessT, mX1, mX2) - aX;
-            aGuessT -= currentX / currentSlope;
-          }
-          return aGuessT;
+            // Newton raphson iteration
+            var aGuessT = aX;
+            for (var i = 0; i < 4; ++i) {
+                var currentSlope = GetSlope(aGuessT, mX1, mX2);
+                if (currentSlope === 0.0) return aGuessT;
+                var currentX = CalcBezier(aGuessT, mX1, mX2) - aX;
+                aGuessT -= currentX / currentSlope;
+            }
+            return aGuessT;
         }
 
         if (mX1 === mY1 && mX2 === mY2) {
             return {
                 css: 'linear',
-                fn: function(aX){
+                fn: function(aX) {
                     return aX;
                 }
             };
         } else {
             return {
-                css: 'cubic-bezier('+mX1+','+mY1+','+mX2+','+mY2+')',
-                fn: function (aX) {
+                css: 'cubic-bezier(' + mX1 + ',' + mY1 + ',' + mX2 + ',' + mY2 + ')',
+                fn: function(aX) {
                     return CalcBezier(GetTForX(aX), mY1, mY2);
                 }
             }
@@ -158,10 +166,10 @@
     };
 
     $.extend(Plugin.easing = {}, {
-        "ease":        easingBezier(0.25, 0.1, 0.25, 1.0), 
-        "linear":      easingBezier(0.00, 0.0, 1.00, 1.0),
-        "ease-in":     easingBezier(0.42, 0.0, 1.00, 1.0),
-        "ease-out":    easingBezier(0.00, 0.0, 0.58, 1.0),
+        "ease": easingBezier(0.25, 0.1, 0.25, 1.0),
+        "linear": easingBezier(0.00, 0.0, 1.00, 1.0),
+        "ease-in": easingBezier(0.42, 0.0, 1.00, 1.0),
+        "ease-out": easingBezier(0.00, 0.0, 0.58, 1.0),
         "ease-in-out": easingBezier(0.42, 0.0, 0.58, 1.0)
     });
 
@@ -186,8 +194,9 @@
             }
 
             this.svg = new SvgElement("svg", {
-                "width": this.width,
-                "height": this.height
+                "width": "100%",
+                "height": "100%",
+                "viewBox": "0 0 " + this.width + " " + this.height
             });
 
             this.buildTrack();
@@ -330,8 +339,8 @@
             var startTime = getTime();
             var animation = function(time) {
                 var distance = (time - startTime) / self.options.speed;
-                
-                var next = Math.round(self.easing.fn(distance/100) * (self.max - self.min));
+
+                var next = Math.round(self.easing.fn(distance / 100) * (self.max - self.min));
 
                 if (goal > start) {
                     next = start + next;
