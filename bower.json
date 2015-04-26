@@ -1,6 +1,6 @@
 {
   "name": "jquery-asPieProgress",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "main": "dist/jquery-asPieProgress.js",
   "ignore": [
     "**/.*",

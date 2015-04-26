@@ -75,12 +75,9 @@
         this.options = $.extend({}, Plugin.defaults, options, this.$element.data());
         this.namespace = this.options.namespace;
 
-        this.classes = {
-            number: this.namespace + '__number',
-            content: this.namespace + '__content'
-        };
+        this.classes = this.options.classes;
         this.easing = Plugin.easing[this.options.easing] || Plugin.easing.ease;
-        this.$element.addClass(this.namespace);
+        this.$element.addClass(this.classes.element);
 
         this.min = this.$element.attr('aria-valuemin');
         this.max = this.$element.attr('aria-valuemax');
@@ -101,6 +98,11 @@
 
     Plugin.defaults = {
         namespace: 'asPieProgress',
+        classes: {
+            element: 'pie_progress',
+            number: 'pie_progress__number',
+            content: 'pie_progress__content'
+        },
         min: 0,
         max: 100,
         goal: 100,
