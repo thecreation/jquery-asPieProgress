@@ -1,4 +1,4 @@
-/*! jQuery asPieProgress - v0.3.2 - 2015-04-26
+/*! jQuery asPieProgress - v0.3.3 - 2015-05-01
 * https://github.com/amazingSurge/jquery-asPieProgress
 * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function(factory) {
@@ -339,22 +339,30 @@
 
             var start = self.now;
             var startTime = getTime();
+            var endTime = startTime + Math.abs(start - goal) * 100 * self.options.speed / (self.max - self.min);
+
             var animation = function(time) {
-                var distance = (time - startTime) / self.options.speed;
+                var next;
 
-                var next = Math.round(self.easing.fn(distance / 100) * (self.max - self.min));
-
-                if (goal > start) {
-                    next = start + next;
-                    if (next > goal) {
-                        next = goal;
-                    }
+                if (time > endTime) {
+                    next = goal;
                 } else {
-                    next = start - next;
-                    if (next < goal) {
-                        next = goal;
+                    var distance = (time - startTime) / self.options.speed;
+                    next = Math.round(self.easing.fn(distance / 100) * (self.max - self.min));
+
+                    if (goal > start) {
+                        next = start + next;
+                        if (next > goal) {
+                            next = goal;
+                        }
+                    } else {
+                        next = start - next;
+                        if (next < goal) {
+                            next = goal;
+                        }
                     }
                 }
+
                 self._update(next);
                 if (next === goal) {
                     window.cancelAnimationFrame(self._frameId);

@@ -1,6 +1,6 @@
 {
   "name": "jquery-asPieProgress",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "main": "dist/jquery-asPieProgress.js",
   "ignore": [
     "**/.*",
@@ -10,7 +10,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": ">=1.8.3",
-    "animate.css": "git@github.com:daneden/animate.css.git#~3.2.0"
+    "jquery": ">=1.8.3"
   }
 }
