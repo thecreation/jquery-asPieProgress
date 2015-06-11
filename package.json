@@ -6,7 +6,8 @@
   "homepage": "https://github.com/amazingSurge/jquery-asPieProgress",
   "author": {
     "name": "amazingSurge",
-    "email": "amazingSurge@yahoo.com"
+    "email": "amazingSurge@yahoo.com",
+    "url": "amazingSurge.com"
   },
   "repository": {
     "type": "git",
