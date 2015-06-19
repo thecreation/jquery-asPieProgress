@@ -5,7 +5,7 @@
  * Copyright (c) 2015 amazingSurge
  * Licensed under the GPL license.
  */
-
+ 
 (function(factory) {
     "use strict";
     if (typeof define === 'function' && define.amd) {
@@ -99,6 +99,7 @@
     Plugin.defaults = {
         namespace: 'asPieProgress',
         classes: {
+            svg: 'pie_progress__svg',
             element: 'pie_progress',
             number: 'pie_progress__number',
             content: 'pie_progress__content'
@@ -201,15 +202,15 @@
             }
 
             this.svg = new SvgElement("svg", {
-                "width": "100%",
-                "height": "100%",
+                "version": "1.1",
+                "preserveAspectRatio": "xMinYMin meet",
                 "viewBox": "0 0 " + this.width + " " + this.height
             });
 
             this.buildTrack();
             this.buildBar();
 
-            this.$element.append(this.svg);
+            $('<div class="' + this.classes.svg + '"></div>').append(this.svg).appendTo(this.$element);
         },
         buildTrack: function() {
             var width = this.size,
