@@ -1,43 +1,52 @@
+/**
+* jQuery asPieProgress
+* A jQuery plugin that animate the progress bar
+* Compiled: Thu Sep 01 2016 16:29:53 GMT+0800 (CST)
+* @version v0.3.4
+* @link https://github.com/amazingSurge/jquery-asPieProgress
+* @copyright LGPL-3.0
+*/
 .pie_progress {
-  text-align: center;
   position: relative;
+  text-align: center;
+
   -webkit-transform-style: preserve-3d;
+
           transform-style: preserve-3d;
 }
 .pie_progress svg {
   margin: 0 auto;
 }
-.pie_progress__content,
-.pie_progress__number,
-.pie_progress__label,
-.pie_progress__icon {
-  width: 100%;
+.pie_progress__content, .pie_progress__number, .pie_progress__label, .pie_progress__icon {
   position: absolute;
   top: 50%;
   left: 0;
+  width: 100%;
   -webkit-transform: translateY(-50%);
       -ms-transform: translateY(-50%);
-       -o-transform: translateY(-50%);
           transform: translateY(-50%);
 }
+
 .pie_progress__number {
   font-size: 42px;
 }
+
 .pie_progress__label {
   margin-top: 32px;
   font-size: 12px;
 }
+
 .pie_progress__svg {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   width: 100%;
   padding-bottom: 100%;
-  vertical-align: middle;
   overflow: hidden;
+  vertical-align: middle;
 }
 .pie_progress__svg svg {
-  display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
+  display: inline-block;
 }

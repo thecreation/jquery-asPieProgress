@@ -1,16 +1,117 @@
-/*
- * jquery-asPieProgress
- * https://github.com/amazingSurge/jquery-asPieProgress
- *
- * Copyright (c) 2015 amazingSurge
- * Licensed under the GPL license.
- */
+/**
+* jQuery asPieProgress
+* A jQuery plugin that animate the progress bar
+* Compiled: Thu Sep 01 2016 16:29:53 GMT+0800 (CST)
+* @version v0.3.4
+* @link https://github.com/amazingSurge/jquery-asPieProgress
+* @copyright LGPL-3.0
+*/
 import $ from 'jQuery';
-import getTime from './getTime';
-import SvgElement from './svgElement';
-import isPercentage from './isPercentage';
-import easingBezier from './easingBezier';
-import defaults from './defaults';
+
+var getTime = () => {
+  'use strict';
+  if (typeof window.performance !== 'undefined' && window.performance.now) {
+    return window.performance.now();
+  }
+  return Date.now();
+};
+
+const SvgElement = (tag, attrs) => {
+  'use strict';
+  const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+
+  $.each(attrs, (name, value) => {
+    elem.setAttribute(name, value);
+  });
+
+  return elem;
+};
+
+var isPercentage = n => {
+  'use strict';
+  return typeof n === 'string' && n.indexOf('%') !== -1;
+};
+
+const easingBezier = (mX1, mY1, mX2, mY2) => {
+  'use strict';
+
+  function A(aA1, aA2) {
+    return 1.0 - 3.0 * aA2 + 3.0 * aA1;
+  }
+
+  function B(aA1, aA2) {
+    return 3.0 * aA2 - 6.0 * aA1;
+  }
+
+  function C(aA1) {
+    return 3.0 * aA1;
+  }
+
+  // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+  function CalcBezier(aT, aA1, aA2) {
+    return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
+  }
+
+  // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+  function GetSlope(aT, aA1, aA2) {
+    return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
+  }
+
+  function GetTForX(aX) {
+    // Newton raphson iteration
+    let aGuessT = aX;
+    for (let i = 0; i < 4; ++i) {
+      const currentSlope = GetSlope(aGuessT, mX1, mX2);
+      if (currentSlope === 0.0) {
+        return aGuessT;
+      }
+      const currentX = CalcBezier(aGuessT, mX1, mX2) - aX;
+      aGuessT -= currentX / currentSlope;
+    }
+    return aGuessT;
+  }
+
+  if (mX1 === mY1 && mX2 === mY2) {
+    return {
+      css: 'linear',
+      fn(aX) {
+        return aX;
+      }
+    };
+  }
+  return {
+    css: `cubic-bezier(${mX1},${mY1},${mX2},${mY2})`,
+    fn(aX) {
+      return CalcBezier(GetTForX(aX), mY1, mY2);
+    }
+  };
+};
+
+var defaults = {
+  namespace: '',
+  classes: {
+    svg: 'pie_progress__svg',
+    element: 'pie_progress',
+    number: 'pie_progress__number',
+    content: 'pie_progress__content'
+  },
+  min: 0,
+  max: 100,
+  goal: 100,
+  size: 160,
+  speed: 15, // speed of 1/100
+  barcolor: '#ef1e25',
+  barsize: '4',
+  trackcolor: '#f2f2f2',
+  fillcolor: 'none',
+  easing: 'ease',
+  numberCallback(n) {
+    'use strict';
+    const percentage = Math.round(this.getPercentage(n));
+    return `${percentage}%`;
+  },
+  contentCallback: null
+};
 
 if (!Date.now) {
   Date.now = () => {

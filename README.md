@@ -8,7 +8,7 @@ Import this libraries:
 * jquery-asPieProgress.js
 
 And CSS:
-* progress.css 
+* progress.css
 
 Create base html element:
 ```html
