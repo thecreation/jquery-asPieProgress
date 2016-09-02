@@ -1,7 +1,7 @@
 /**
 * jQuery asPieProgress
 * A jQuery plugin that animate the progress bar
-* Compiled: Thu Sep 01 2016 16:29:53 GMT+0800 (CST)
+* Compiled: Fri Sep 02 2016 14:07:00 GMT+0800 (CST)
 * @version v0.3.4
 * @link https://github.com/amazingSurge/jquery-asPieProgress
 * @copyright LGPL-3.0

@@ -333,13 +333,13 @@ class asPieProgress {
       } else if ((/^(get)$/.test(method))) {
         const api = this.first().data(pluginName);
         if (api && typeof api[method] === 'function') {
-          return api[method].apply(api, args);
+          return api[method](...args);
         }
       } else {
         return this.each(function() {
           const api = $.data(this, pluginName);
           if (api && typeof api[method] === 'function') {
-            api[method].apply(api, args);
+            api[method](...args);
           }
         });
       }

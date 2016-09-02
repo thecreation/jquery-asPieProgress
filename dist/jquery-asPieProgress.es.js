@@ -1,7 +1,7 @@
 /**
 * jQuery asPieProgress
 * A jQuery plugin that animate the progress bar
-* Compiled: Thu Sep 01 2016 16:29:53 GMT+0800 (CST)
+* Compiled: Fri Sep 02 2016 14:07:00 GMT+0800 (CST)
 * @version v0.3.4
 * @link https://github.com/amazingSurge/jquery-asPieProgress
 * @copyright LGPL-3.0
@@ -113,6 +113,13 @@ var defaults = {
   contentCallback: null
 };
 
+/*
+ * jquery-asPieProgress
+ * https://github.com/amazingSurge/jquery-asPieProgress
+ *
+ * Copyright (c) 2015 amazingSurge
+ * Licensed under the GPL license.
+ */
 if (!Date.now) {
   Date.now = () => {
     'use strict';
@@ -434,13 +441,13 @@ class asPieProgress {
       } else if ((/^(get)$/.test(method))) {
         const api = this.first().data(pluginName);
         if (api && typeof api[method] === 'function') {
-          return api[method].apply(api, args);
+          return api[method](...args);
         }
       } else {
         return this.each(function() {
           const api = $.data(this, pluginName);
           if (api && typeof api[method] === 'function') {
-            api[method].apply(api, args);
+            api[method](...args);
           }
         });
       }
