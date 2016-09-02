@@ -5,7 +5,7 @@
  * Copyright (c) 2015 amazingSurge
  * Licensed under the GPL license.
  */
-import $ from 'jQuery';
+import $ from 'jquery';
 import getTime from './getTime';
 import SvgElement from './svgElement';
 import isPercentage from './isPercentage';
