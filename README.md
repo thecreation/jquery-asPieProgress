@@ -1,6 +1,6 @@
 # [jQuery asPieProgress](https://github.com/amazingSurge/jquery-asPieProgress) ![bower][bower-image] [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![prs-welcome]](#contributing)
 
-> A jquery plugin that do amazing things.
+> A jQuery plugin that animate the pie progress.
 
 ## Table of contents
 - [Main files](#main-files)
