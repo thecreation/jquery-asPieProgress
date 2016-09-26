@@ -191,8 +191,8 @@ init    | Fires when the instance is setup for the first time.
 ready   | Fires when the instance is ready for API use.
 start   | This event is fired immediately when the `start` instance method has been called.
 stop    | This event is fired immediately when the `stop` instance method has been called.
-update  | Fires when the progress value is change. 
-finish  | Fires when the animation is finish. Or the `finish` instance method has been called.
+update  | Fires when the progress value is changing. 
+finish  | Fires when the animation is finished, Or the `finish` instance method has been called.
 reset   | This event is fired immediately when the `reset` instance method has been called.
 destroy | Fires when an instance is destroyed. 
 

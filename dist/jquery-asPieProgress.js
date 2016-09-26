@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.3.4
+* jQuery asPieProgress v0.4.0
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -608,7 +608,7 @@
     }();
 
     var info = {
-      version: '0.3.4'
+      version: '0.4.0'
     };
 
     var NAME = 'asPieProgress';
