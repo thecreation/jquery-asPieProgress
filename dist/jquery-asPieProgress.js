@@ -1,33 +1,28 @@
 /**
-* jQuery asPieProgress
-* A jQuery plugin that animate the progress bar
-* Compiled: Fri Sep 02 2016 14:07:00 GMT+0800 (CST)
-* @version v0.3.4
-* @link https://github.com/amazingSurge/jquery-asPieProgress
-* @copyright LGPL-3.0
+* jQuery asPieProgress v0.3.4
+* https://github.com/amazingSurge/jquery-asPieProgress
+*
+* Copyright (c) amazingSurge
+* Released under the LGPL-3.0 license
 */
 (function(global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', 'jQuery'], factory);
+    define(['jquery'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('jQuery'));
+    factory(require('jquery'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.jQuery);
-    global.jqueryAsPieProgress = mod.exports;
+    factory(global.jQuery);
+    global.jqueryAsPieProgressEs = mod.exports;
   }
 })(this,
 
-  function(exports, _jQuery) {
+  function(_jquery) {
     'use strict';
 
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-
-    var _jQuery2 = _interopRequireDefault(_jQuery);
+    var _jquery2 = _interopRequireDefault(_jquery);
 
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : {
@@ -76,137 +71,27 @@
       };
     }();
 
-    var getTime = function getTime() {
-      'use strict';
-
-      if (typeof window.performance !== 'undefined' && window.performance.now) {
-
-        return window.performance.now();
-      }
-
-      return Date.now();
-    };
-
     var SvgElement = function SvgElement(tag, attrs) {
       'use strict';
 
       var elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
 
-      _jQuery2.default.each(attrs,
+      if (!attrs) {
 
-        function(name, value) {
-          elem.setAttribute(name, value);
+        return elem;
+      }
+
+      for (var key in attrs) {
+
+        if (!Object.hasOwnProperty.call(attrs, key)) {
+          continue;
         }
-      );
+
+        elem.setAttribute(key, attrs[key]);
+      }
 
       return elem;
     };
-
-    var isPercentage = function isPercentage(n) {
-      'use strict';
-
-      return typeof n === 'string' && n.indexOf('%') !== -1;
-    };
-
-    var easingBezier = function easingBezier(mX1, mY1, mX2, mY2) {
-      'use strict';
-
-      function A(aA1, aA2) {
-        return 1.0 - 3.0 * aA2 + 3.0 * aA1;
-      }
-
-      function B(aA1, aA2) {
-        return 3.0 * aA2 - 6.0 * aA1;
-      }
-
-      function C(aA1) {
-        return 3.0 * aA1;
-      }
-
-      // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
-
-      function CalcBezier(aT, aA1, aA2) {
-        return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
-      }
-
-      // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
-
-      function GetSlope(aT, aA1, aA2) {
-        return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
-      }
-
-      function GetTForX(aX) {
-        // Newton raphson iteration
-        var aGuessT = aX;
-
-        for (var i = 0; i < 4; ++i) {
-          var currentSlope = GetSlope(aGuessT, mX1, mX2);
-
-          if (currentSlope === 0.0) {
-
-            return aGuessT;
-          }
-          var currentX = CalcBezier(aGuessT, mX1, mX2) - aX;
-          aGuessT -= currentX / currentSlope;
-        }
-
-        return aGuessT;
-      }
-
-      if (mX1 === mY1 && mX2 === mY2) {
-
-        return {
-          css: 'linear',
-          fn: function fn(aX) {
-            return aX;
-          }
-        };
-      }
-
-      return {
-        css: 'cubic-bezier(' + mX1 + ',' + mY1 + ',' + mX2 + ',' + mY2 + ')',
-        fn: function fn(aX) {
-          return CalcBezier(GetTForX(aX), mY1, mY2);
-        }
-      };
-    };
-
-    var defaults = {
-      namespace: '',
-      classes: {
-        svg: 'pie_progress__svg',
-        element: 'pie_progress',
-        number: 'pie_progress__number',
-        content: 'pie_progress__content'
-      },
-      min: 0,
-      max: 100,
-      goal: 100,
-      size: 160,
-      speed: 15, // speed of 1/100
-      barcolor: '#ef1e25',
-      barsize: '4',
-      trackcolor: '#f2f2f2',
-      fillcolor: 'none',
-      easing: 'ease',
-      numberCallback: function numberCallback(n) {
-        'use strict';
-
-        var percentage = Math.round(this.getPercentage(n));
-
-        return percentage + '%';
-      },
-
-      contentCallback: null
-    };
-
-    /*
-     * jquery-asPieProgress
-     * https://github.com/amazingSurge/jquery-asPieProgress
-     *
-     * Copyright (c) 2015 amazingSurge
-     * Licensed under the GPL license.
-     */
 
     if (!Date.now) {
       Date.now = function() {
@@ -247,24 +132,137 @@
       })();
     }
 
+    var getTime = function getTime() {
+      if (typeof window.performance !== 'undefined' && window.performance.now) {
+
+        return window.performance.now();
+      }
+
+      return Date.now();
+    };
+
+    var isPercentage = function isPercentage(n) {
+      'use strict';
+
+      return typeof n === 'string' && n.indexOf('%') !== -1;
+    };
+
     var svgSupported = 'createElementNS' in document && new SvgElement('svg', {}).createSVGRect;
 
-    var pluginName = 'asPieProgress';
+    var easingBezier = function easingBezier(mX1, mY1, mX2, mY2) {
+      'use strict';
 
-    defaults.namespace = pluginName;
+      var a = function a(aA1, aA2) {
+        return 1.0 - 3.0 * aA2 + 3.0 * aA1;
+      };
+
+      var b = function b(aA1, aA2) {
+        return 3.0 * aA2 - 6.0 * aA1;
+      };
+
+      var c = function c(aA1) {
+        return 3.0 * aA1;
+      };
+
+      // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
+      var calcBezier = function calcBezier(aT, aA1, aA2) {
+        return ((a(aA1, aA2) * aT + b(aA1, aA2)) * aT + c(aA1)) * aT;
+      };
+
+      // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
+      var getSlope = function getSlope(aT, aA1, aA2) {
+        return 3.0 * a(aA1, aA2) * aT * aT + 2.0 * b(aA1, aA2) * aT + c(aA1);
+      };
+
+      var getTForX = function getTForX(aX) {
+        // Newton raphson iteration
+        var aGuessT = aX;
+
+        for (var _i = 0; _i < 4; ++_i) {
+          var currentSlope = getSlope(aGuessT, mX1, mX2);
+
+          if (currentSlope === 0.0) {
+
+            return aGuessT;
+          }
+          var currentX = calcBezier(aGuessT, mX1, mX2) - aX;
+          aGuessT -= currentX / currentSlope;
+        }
+
+        return aGuessT;
+      };
+
+      if (mX1 === mY1 && mX2 === mY2) {
+
+        return {
+          css: 'linear',
+          fn: function fn(aX) {
+            return aX;
+          }
+        };
+      }
+
+      return {
+        css: 'cubic-bezier(' + mX1 + ',' + mY1 + ',' + mX2 + ',' + mY2 + ')',
+        fn: function fn(aX) {
+          return calcBezier(getTForX(aX), mY1, mY2);
+        }
+      };
+    };
+
+    var EASING = {
+      ease: easingBezier(0.25, 0.1, 0.25, 1.0),
+      linear: easingBezier(0.00, 0.0, 1.00, 1.0),
+      'ease-in': easingBezier(0.42, 0.0, 1.00, 1.0),
+      'ease-out': easingBezier(0.00, 0.0, 0.58, 1.0),
+      'ease-in-out': easingBezier(0.42, 0.0, 0.58, 1.0)
+    };
+
+    var DEFAULTS = {
+      namespace: '',
+      classes: {
+        svg: 'pie_progress__svg',
+        element: 'pie_progress',
+        number: 'pie_progress__number',
+        content: 'pie_progress__content'
+      },
+      min: 0,
+      max: 100,
+      goal: 100,
+      size: 160,
+      speed: 15, // speed of 1/100
+      barcolor: '#ef1e25',
+      barsize: '4',
+      trackcolor: '#f2f2f2',
+      fillcolor: 'none',
+      easing: 'ease',
+      numberCallback: function numberCallback(n) {
+        'use strict';
+
+        var percentage = Math.round(this.getPercentage(n));
+
+        return percentage + '%';
+      },
+
+      contentCallback: null
+    };
+
+    var NAME$1 = 'asPieProgress';
 
     var asPieProgress = function() {
       function asPieProgress(element, options) {
         _classCallCheck(this, asPieProgress);
 
         this.element = element;
-        this.$element = (0, _jQuery2.default)(element);
+        this.$element = (0, _jquery2.default)(element);
 
-        this.options = _jQuery2.default.extend({}, defaults, options, this.$element.data());
+        this.options = _jquery2.default.extend({}, DEFAULTS, {
+          namespace: NAME$1
+        }, options, this.$element.data());
         this.namespace = this.options.namespace;
 
         this.classes = this.options.classes;
-        this.easing = asPieProgress.easing[this.options.easing] || asPieProgress.easing.ease;
+        this.easing = EASING[this.options.easing] || EASING.ease;
         this.$element.addClass(this.classes.element);
 
         this.min = this.$element.attr('aria-valuemin');
@@ -316,7 +314,7 @@
           this.buildTrack();
           this.buildBar();
 
-          (0, _jQuery2.default)('<div class="' + this.classes.svg + '"></div>').append(this.svg).appendTo(this.$element);
+          (0, _jquery2.default)('<div class="' + this.classes.svg + '"></div>').append(this.svg).appendTo(this.$element);
         }
       }, {
         key: 'buildTrack',
@@ -430,7 +428,7 @@
           var data = [this].concat(args);
 
           // event
-          this.$element.trigger(pluginName + '::' + eventType, data);
+          this.$element.trigger(NAME$1 + '::' + eventType, data);
 
           // callback
           eventType = eventType.replace(/\b\w+\b/g,
@@ -453,7 +451,7 @@
       }, {
         key: 'go',
         value: function go(goal) {
-          var self = this;
+          var that = this;
           this._clear();
 
           if (isPercentage(goal)) {
@@ -475,9 +473,9 @@
             this._drawBar(goal);
           }
 
-          var start = self.now;
+          var start = that.now;
           var startTime = getTime();
-          var endTime = startTime + Math.abs(start - goal) * 100 * self.options.speed / (self.max - self.min);
+          var endTime = startTime + Math.abs(start - goal) * 100 * that.options.speed / (that.max - that.min);
 
           var animation = function animation(time) {
             var next = void 0;
@@ -485,8 +483,8 @@
             if (time > endTime) {
               next = goal;
             } else {
-              var distance = (time - startTime) / self.options.speed;
-              next = Math.round(self.easing.fn(distance / 100) * (self.max - self.min));
+              var distance = (time - startTime) / that.options.speed;
+              next = Math.round(that.easing.fn(distance / 100) * (that.max - that.min));
 
               if (goal > start) {
                 next = start + next;
@@ -503,21 +501,21 @@
               }
             }
 
-            self._update(next);
+            that._update(next);
 
             if (next === goal) {
-              window.cancelAnimationFrame(self._frameId);
-              self._frameId = null;
+              window.cancelAnimationFrame(that._frameId);
+              that._frameId = null;
 
-              if (self.now === self.goal) {
-                self._trigger('finish');
+              if (that.now === that.goal) {
+                that._trigger('finish');
               }
             } else {
-              self._frameId = window.requestAnimationFrame(animation);
+              that._frameId = window.requestAnimationFrame(animation);
             }
           };
 
-          self._frameId = window.requestAnimationFrame(animation);
+          that._frameId = window.requestAnimationFrame(animation);
         }
       }, {
         key: '_update',
@@ -582,91 +580,107 @@
       }, {
         key: 'destory',
         value: function destory() {
-          this.$element.data(pluginName, null);
+          this.$element.data(NAME$1, null);
           this._trigger('destory');
         }
       }], [{
-        key: '_jQueryInterface',
-        value: function _jQueryInterface(options) {
-          var _this = this;
-
+        key: 'registerEasing',
+        value: function registerEasing(name) {
           for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
             args[_key2 - 1] = arguments[_key2];
           }
 
-          if (typeof options === 'string') {
-            var _ret2 = function() {
-              var method = options;
-
-              if (/^\_/.test(method)) {
-
-                return {
-                  v: false
-                };
-              } else if (/^(get)$/.test(method)) {
-                var api = _this.first().data(pluginName);
-
-                if (api && typeof api[method] === 'function') {
-
-                  return {
-                    v: api[method].apply(api, args)
-                  };
-                }
-              } else {
-
-                return {
-                  v: _this.each(
-
-                    function() {
-                      var api = _jQuery2.default.data(this, pluginName);
-
-                      if (api && typeof api[method] === 'function') {
-                        api[method].apply(api, args);
-                      }
-                    }
-                  )
-                };
-              }
-            }();
-
-            if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object")
-
-              return _ret2.v;
-          }
-
-          return this.each(
-
-            function() {
-              if (!_jQuery2.default.data(this, pluginName)) {
-                _jQuery2.default.data(this, pluginName, new asPieProgress(this, options));
-              }
-            }
-          );
+          EASING[name] = easingBezier.apply(undefined, args);
+        }
+      }, {
+        key: 'getEasing',
+        value: function getEasing(name) {
+          return EASING[name];
+        }
+      }, {
+        key: 'setDefaults',
+        value: function setDefaults(options) {
+          _jquery2.default.extend(DEFAULTS, _jquery2.default.isPlainObject(options) && options);
         }
       }]);
 
       return asPieProgress;
     }();
 
-    _jQuery2.default.extend(asPieProgress.easing = {}, {
-      ease: easingBezier(0.25, 0.1, 0.25, 1.0),
-      linear: easingBezier(0.00, 0.0, 1.00, 1.0),
-      'ease-in': easingBezier(0.42, 0.0, 1.00, 1.0),
-      'ease-out': easingBezier(0.00, 0.0, 0.58, 1.0),
-      'ease-in-out': easingBezier(0.42, 0.0, 0.58, 1.0)
-    });
+    var info = {
+      version: '0.3.4'
+    };
 
-    _jQuery2.default.fn[pluginName] = asPieProgress._jQueryInterface;
-    _jQuery2.default.fn[pluginName].constructor = asPieProgress;
-    _jQuery2.default.fn[pluginName].noConflict = function() {
-      'use strict';
+    var NAME = 'asPieProgress';
+    var OtherAsPieProgress = _jquery2.default.fn.asPieProgress;
 
-      _jQuery2.default.fn[pluginName] = window.JQUERY_NO_CONFLICT;
+    _jquery2.default.fn.asPieProgress = function jQueryAsPieProgress(options) {
+      var _this = this;
 
-      return asPieProgress._jQueryInterface;
+      for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      if (typeof options === 'string') {
+        var _ret2 = function() {
+          var method = options;
+
+          if (/^_/.test(method)) {
+
+            return {
+              v: false
+            };
+          } else if (/^(get)/.test(method)) {
+            var instance = _this.first().data(NAME);
+
+            if (instance && typeof instance[method] === 'function') {
+
+              return {
+                v: instance[method].apply(instance, args)
+              };
+            }
+          } else {
+
+            return {
+              v: _this.each(
+
+                function() {
+                  var instance = _jquery2.default.data(this, NAME);
+
+                  if (instance && typeof instance[method] === 'function') {
+                    instance[method].apply(instance, args);
+                  }
+                }
+              )
+            };
+          }
+        }();
+
+        if ((typeof _ret2 === 'undefined' ? 'undefined' : _typeof(_ret2)) === "object")
+
+          return _ret2.v;
+      }
+
+      return this.each(
+
+        function() {
+          if (!(0, _jquery2.default)(this).data(NAME)) {
+            (0, _jquery2.default)(this).data(NAME, new asPieProgress(this, options));
+          }
+        }
+      );
     }
     ;
 
-    exports.default = asPieProgress;
+    _jquery2.default.asPieProgress = _jquery2.default.extend({
+      setDefaults: asPieProgress.setDefaults,
+      registerEasing: asPieProgress.registerEasing,
+      getEasing: asPieProgress.getEasing,
+      noConflict: function noConflict() {
+        _jquery2.default.fn.asPieProgress = OtherAsPieProgress;
+
+        return this;
+      }
+    }, info);
   }
 );

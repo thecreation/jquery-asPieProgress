@@ -1,75 +1,113 @@
 /**
-* jQuery asPieProgress
-* A jQuery plugin that animate the progress bar
-* Compiled: Fri Sep 02 2016 14:07:00 GMT+0800 (CST)
-* @version v0.3.4
-* @link https://github.com/amazingSurge/jquery-asPieProgress
-* @copyright LGPL-3.0
+* jQuery asPieProgress v0.3.4
+* https://github.com/amazingSurge/jquery-asPieProgress
+*
+* Copyright (c) amazingSurge
+* Released under the LGPL-3.0 license
 */
-import $ from 'jQuery';
+import $ from 'jquery';
 
-var getTime = () => {
+const SvgElement = (tag, attrs) => {
   'use strict';
+  const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
+
+  if (!attrs) {
+    return elem;
+  }
+
+  for (let key in attrs) {
+    if (!Object.hasOwnProperty.call(attrs, key)) {
+      continue;
+    }
+
+    elem.setAttribute(key, attrs[key]);
+  }
+  return elem;
+};
+
+if (!Date.now) {
+  Date.now = () => {
+    'use strict';
+    return new Date().getTime();
+  }
+}
+
+const vendors = ['webkit', 'moz'];
+for (let i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+  const vp = vendors[i];
+  window.requestAnimationFrame = window[`${vp}RequestAnimationFrame`];
+  window.cancelAnimationFrame = (window[`${vp}CancelAnimationFrame`] || window[`${vp}CancelRequestAnimationFrame`]);
+}
+
+if (/iP(ad|hone|od).*OS (6|7)/.test(window.navigator.userAgent) // iOS6 is buggy
+  ||
+  !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+  let lastTime = 0;
+  window.requestAnimationFrame = callback => {
+    'use strict';
+    const now = getTime();
+    const nextTime = Math.max(lastTime + 16, now);
+    return setTimeout(() => {
+        callback(lastTime = nextTime);
+      },
+      nextTime - now);
+  };
+  window.cancelAnimationFrame = clearTimeout;
+}
+
+const getTime = () => {
   if (typeof window.performance !== 'undefined' && window.performance.now) {
     return window.performance.now();
   }
   return Date.now();
 };
 
-const SvgElement = (tag, attrs) => {
+const isPercentage = (n) => {
   'use strict';
-  const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
 
-  $.each(attrs, (name, value) => {
-    elem.setAttribute(name, value);
-  });
-
-  return elem;
-};
-
-var isPercentage = n => {
-  'use strict';
   return typeof n === 'string' && n.indexOf('%') !== -1;
 };
+
+const svgSupported = 'createElementNS' in document && new SvgElement('svg', {}).createSVGRect;
 
 const easingBezier = (mX1, mY1, mX2, mY2) => {
   'use strict';
 
-  function A(aA1, aA2) {
+  let a = (aA1, aA2) => {
     return 1.0 - 3.0 * aA2 + 3.0 * aA1;
-  }
+  };
 
-  function B(aA1, aA2) {
+  let b = (aA1, aA2) => {
     return 3.0 * aA2 - 6.0 * aA1;
-  }
+  };
 
-  function C(aA1) {
+  let c = (aA1) => {
     return 3.0 * aA1;
-  }
+  };
 
   // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
-  function CalcBezier(aT, aA1, aA2) {
-    return ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
-  }
+  let calcBezier = (aT, aA1, aA2) => {
+    return ((a(aA1, aA2) * aT + b(aA1, aA2)) * aT + c(aA1)) * aT;
+  };
 
   // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
-  function GetSlope(aT, aA1, aA2) {
-    return 3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
-  }
+  let getSlope = (aT, aA1, aA2) => {
+    return 3.0 * a(aA1, aA2) * aT * aT + 2.0 * b(aA1, aA2) * aT + c(aA1);
+  };
 
-  function GetTForX(aX) {
+  let getTForX = (aX) => {
     // Newton raphson iteration
     let aGuessT = aX;
     for (let i = 0; i < 4; ++i) {
-      const currentSlope = GetSlope(aGuessT, mX1, mX2);
+      let currentSlope = getSlope(aGuessT, mX1, mX2);
       if (currentSlope === 0.0) {
         return aGuessT;
       }
-      const currentX = CalcBezier(aGuessT, mX1, mX2) - aX;
+      let currentX = calcBezier(aGuessT, mX1, mX2) - aX;
       aGuessT -= currentX / currentSlope;
     }
     return aGuessT;
-  }
+  };
 
   if (mX1 === mY1 && mX2 === mY2) {
     return {
@@ -79,15 +117,24 @@ const easingBezier = (mX1, mY1, mX2, mY2) => {
       }
     };
   }
+
   return {
     css: `cubic-bezier(${mX1},${mY1},${mX2},${mY2})`,
     fn(aX) {
-      return CalcBezier(GetTForX(aX), mY1, mY2);
+      return calcBezier(getTForX(aX), mY1, mY2);
     }
   };
 };
 
-var defaults = {
+var EASING = {
+  ease: easingBezier(0.25, 0.1, 0.25, 1.0),
+  linear: easingBezier(0.00, 0.0, 1.00, 1.0),
+  'ease-in': easingBezier(0.42, 0.0, 1.00, 1.0),
+  'ease-out': easingBezier(0.00, 0.0, 0.58, 1.0),
+  'ease-in-out': easingBezier(0.42, 0.0, 0.58, 1.0)
+};
+
+var DEFAULTS = {
   namespace: '',
   classes: {
     svg: 'pie_progress__svg',
@@ -113,58 +160,18 @@ var defaults = {
   contentCallback: null
 };
 
-/*
- * jquery-asPieProgress
- * https://github.com/amazingSurge/jquery-asPieProgress
- *
- * Copyright (c) 2015 amazingSurge
- * Licensed under the GPL license.
- */
-if (!Date.now) {
-  Date.now = () => {
-    'use strict';
-    return new Date().getTime();
-  }
-}
-
-const vendors = ['webkit', 'moz'];
-for (let i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
-  const vp = vendors[i];
-  window.requestAnimationFrame = window[`${vp}RequestAnimationFrame`];
-  window.cancelAnimationFrame = (window[`${vp}CancelAnimationFrame`] || window[`${vp}CancelRequestAnimationFrame`]);
-}
-if (/iP(ad|hone|od).*OS (6|7)/.test(window.navigator.userAgent) // iOS6 is buggy
-  ||
-  !window.requestAnimationFrame || !window.cancelAnimationFrame) {
-  let lastTime = 0;
-  window.requestAnimationFrame = callback => {
-    'use strict';
-    const now = getTime();
-    const nextTime = Math.max(lastTime + 16, now);
-    return setTimeout(() => {
-        callback(lastTime = nextTime);
-      },
-      nextTime - now);
-  };
-  window.cancelAnimationFrame = clearTimeout;
-}
-
-const svgSupported = 'createElementNS' in document && new SvgElement('svg', {}).createSVGRect;
-
-const pluginName = 'asPieProgress';
-
-defaults.namespace = pluginName;
+const NAME$1 = 'asPieProgress';
 
 class asPieProgress {
   constructor(element, options) {
     this.element = element;
     this.$element = $(element);
 
-    this.options = $.extend({}, defaults, options, this.$element.data());
+    this.options = $.extend({}, DEFAULTS, {namespace: NAME$1}, options, this.$element.data());
     this.namespace = this.options.namespace;
 
     this.classes = this.options.classes;
-    this.easing = asPieProgress.easing[this.options.easing] || asPieProgress.easing.ease;
+    this.easing = EASING[this.options.easing] || EASING.ease;
     this.$element.addClass(this.classes.element);
 
     this.min = this.$element.attr('aria-valuemin');
@@ -197,6 +204,7 @@ class asPieProgress {
     this.initialized = true;
     this._trigger('ready');
   }
+
   prepare() {
     if (!svgSupported) {
       return;
@@ -213,6 +221,7 @@ class asPieProgress {
 
     $(`<div class="${this.classes.svg}"></div>`).append(this.svg).appendTo(this.$element);
   }
+
   buildTrack() {
     const height = this.size,
       width = this.size;
@@ -234,6 +243,7 @@ class asPieProgress {
 
     this.svg.appendChild(ellipse);
   }
+
   buildBar() {
     if (!svgSupported) {
       return;
@@ -250,6 +260,7 @@ class asPieProgress {
     this._drawBar(this.first);
     this._updateBar();
   }
+
   _drawBar(n) {
     if (!svgSupported) {
       return;
@@ -291,6 +302,7 @@ class asPieProgress {
 
     this.bar.setAttribute('d', d);
   }
+
   _updateBar() {
     if (!svgSupported) {
       return;
@@ -303,25 +315,28 @@ class asPieProgress {
     this.bar.style.strokeDasharray = `${length} ${length}`;
     this.bar.style.strokeDashoffset = offset;
   }
+
   _trigger(eventType, ...args) {
-      const data = [this].concat(args);
+    const data = [this].concat(args);
 
-      // event
-      this.$element.trigger(`${pluginName}::${eventType}`, data);
+    // event
+    this.$element.trigger(`${NAME$1}::${eventType}`, data);
 
-      // callback
-      eventType = eventType.replace(/\b\w+\b/g, word => word.substring(0, 1).toUpperCase() + word.substring(1));
-      const onFunction = `on${eventType}`;
-      if (typeof this.options[onFunction] === 'function') {
-        this.options[onFunction](args);
-      }
+    // callback
+    eventType = eventType.replace(/\b\w+\b/g, word => word.substring(0, 1).toUpperCase() + word.substring(1));
+    const onFunction = `on${eventType}`;
+    if (typeof this.options[onFunction] === 'function') {
+      this.options[onFunction](args);
     }
-    // Return the percentage based on the current step
+  }
+
+  // Return the percentage based on the current step
   getPercentage(n) {
     return 100 * (n - this.min) / (this.max - this.min);
   }
+
   go(goal) {
-    const self = this;
+    const that = this;
     this._clear();
 
     if (isPercentage(goal)) {
@@ -342,9 +357,9 @@ class asPieProgress {
       this._drawBar(goal);
     }
 
-    const start = self.now;
+    const start = that.now;
     const startTime = getTime();
-    const endTime = startTime + Math.abs(start - goal) * 100 * self.options.speed / (self.max - self.min);
+    const endTime = startTime + Math.abs(start - goal) * 100 * that.options.speed / (that.max - that.min);
 
     const animation = time => {
       let next;
@@ -352,8 +367,8 @@ class asPieProgress {
       if (time > endTime) {
         next = goal;
       } else {
-        const distance = (time - startTime) / self.options.speed;
-        next = Math.round(self.easing.fn(distance / 100) * (self.max - self.min));
+        const distance = (time - startTime) / that.options.speed;
+        next = Math.round(that.easing.fn(distance / 100) * (that.max - that.min));
 
         if (goal > start) {
           next = start + next;
@@ -368,21 +383,22 @@ class asPieProgress {
         }
       }
 
-      self._update(next);
+      that._update(next);
       if (next === goal) {
-        window.cancelAnimationFrame(self._frameId);
-        self._frameId = null;
+        window.cancelAnimationFrame(that._frameId);
+        that._frameId = null;
 
-        if (self.now === self.goal) {
-          self._trigger('finish');
+        if (that.now === that.goal) {
+          that._trigger('finish');
         }
       } else {
-        self._frameId = window.requestAnimationFrame(animation);
+        that._frameId = window.requestAnimationFrame(animation);
       }
     };
 
-    self._frameId = window.requestAnimationFrame(animation);
+    that._frameId = window.requestAnimationFrame(animation);
   }
+
   _update(n) {
     this.now = n;
 
@@ -398,82 +414,101 @@ class asPieProgress {
 
     this._trigger('update', n);
   }
+
   _clear() {
     if (this._frameId) {
       window.cancelAnimationFrame(this._frameId);
       this._frameId = null;
     }
   }
+
   get() {
     return this.now;
   }
+
   start() {
     this._clear();
     this._trigger('start');
     this.go(this.goal);
   }
+
   reset() {
     this._clear();
     this._drawBar(this.first);
     this._update(this.first);
     this._trigger('reset');
   }
+
   stop() {
     this._clear();
     this._trigger('stop');
   }
+
   finish() {
     this._clear();
     this._update(this.goal);
     this._trigger('finish');
   }
+
   destory() {
-    this.$element.data(pluginName, null);
+    this.$element.data(NAME$1, null);
     this._trigger('destory');
   }
 
-  static _jQueryInterface(options, ...args) {
-    if (typeof options === 'string') {
-      const method = options;
+  static registerEasing(name, ...args) {
+    EASING[name] = easingBezier(...args);
+  }
 
-      if (/^\_/.test(method)) {
-        return false;
-      } else if ((/^(get)$/.test(method))) {
-        const api = this.first().data(pluginName);
-        if (api && typeof api[method] === 'function') {
-          return api[method](...args);
-        }
-      } else {
-        return this.each(function() {
-          const api = $.data(this, pluginName);
-          if (api && typeof api[method] === 'function') {
-            api[method](...args);
-          }
-        });
-      }
-    }
-    return this.each(function() {
-      if (!$.data(this, pluginName)) {
-        $.data(this, pluginName, new asPieProgress(this, options));
-      }
-    });
+  static getEasing(name) {
+    return EASING[name];
+  }
+
+  static setDefaults(options) {
+    $.extend(DEFAULTS, $.isPlainObject(options) && options);
   }
 }
 
-$.extend(asPieProgress.easing = {}, {
-  ease: easingBezier(0.25, 0.1, 0.25, 1.0),
-  linear: easingBezier(0.00, 0.0, 1.00, 1.0),
-  'ease-in': easingBezier(0.42, 0.0, 1.00, 1.0),
-  'ease-out': easingBezier(0.00, 0.0, 0.58, 1.0),
-  'ease-in-out': easingBezier(0.42, 0.0, 0.58, 1.0)
-});
-
-$.fn[pluginName] = asPieProgress._jQueryInterface;
-$.fn[pluginName].constructor = asPieProgress;
-$.fn[pluginName].noConflict = () => {
-  'use strict';
-  $.fn[pluginName] = window.JQUERY_NO_CONFLICT;
-  return asPieProgress._jQueryInterface;
+var info = {
+  version:'0.3.4'
 };
 
-export default asPieProgress;
+const NAME = 'asPieProgress';
+const OtherAsPieProgress = $.fn.asPieProgress;
+
+$.fn.asPieProgress = function jQueryAsPieProgress(options, ...args) {
+  if (typeof options === 'string') {
+    let method = options;
+
+    if (/^_/.test(method)) {
+      return false;
+    } else if ((/^(get)/.test(method))) {
+      let instance = this.first().data(NAME);
+      if (instance && typeof instance[method] === 'function') {
+        return instance[method](...args);
+      }
+    } else {
+      return this.each(function() {
+        let instance = $.data(this, NAME);
+        if (instance && typeof instance[method] === 'function') {
+          instance[method](...args);
+        }
+      });
+    }
+  }
+
+  return this.each(function() {
+    if (!$(this).data(NAME)) {
+      $(this).data(NAME, new asPieProgress(this, options));
+    }
+  });
+};
+
+$.asPieProgress = $.extend({
+  setDefaults: asPieProgress.setDefaults,
+  registerEasing: asPieProgress.registerEasing,
+  getEasing: asPieProgress.getEasing,
+  noConflict: function() {
+    $.fn.asPieProgress = OtherAsPieProgress;
+    return this;
+  }
+}, info);

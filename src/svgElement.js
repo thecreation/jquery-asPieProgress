@@ -1,13 +1,18 @@
-import $ from 'jQuery';
-
 const SvgElement = (tag, attrs) => {
   'use strict';
   const elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
 
-  $.each(attrs, (name, value) => {
-    elem.setAttribute(name, value);
-  });
+  if (!attrs) {
+    return elem;
+  }
 
+  for (let key in attrs) {
+    if (!Object.hasOwnProperty.call(attrs, key)) {
+      continue;
+    }
+
+    elem.setAttribute(key, attrs[key]);
+  }
   return elem;
 };
 

@@ -1,0 +1,116 @@
+<!doctype html>
+<html class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>jquery-asPieProgress</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="../dist/css/asPieProgress.css">
+  <style type="text/css">
+    body {
+      padding: 40px;
+    }
+    .pie_progress {
+      width: 160px;
+      margin: 10px auto;
+    }
+    @media all and (max-width: 768px) {
+      .pie_progress {
+        width: 80%;
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!--[if lt IE 8]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <section>
+    <h2>asPieProgress</h2>
+    <section>
+      <div class="row">
+        <div class="pie_progress" role="progressbar" data-goal="33">
+          <div class="pie_progress__number">0%</div>
+          <div class="pie_progress__label">New Clients</div>
+        </div>
+        <div class="pie_progress" role="progressbar" data-goal="-50" data-barcolor="#3daf2c" data-barsize="10" aria-valuemin="-100" aria-valuemax="100">
+          <div class="pie_progress__content">Hello world</div>
+        </div>
+        <div class="pie_progress" role="progressbar" data-goal="100" aria-valuemin="0" aria-valuemax="100">
+          <span class="pie_progress__number">0%</span>
+        </div>
+        <div class="pie_progress--slow" role="progressbar">
+          <span class="pie_progress__number">0%</span>
+        </div>
+        <div class="pie_progress--countdown" role="progressbar">
+          <span class="pie_progress__number">2: 00</span>
+        </div>
+        <div>
+          <button id="button_start">start()</button>
+          <button id="button_stop">stop()</button>
+          <button id="button_go">go('50')</button>
+          <button id="button_go_percentage">go('50%')</button>
+          <button id="button_finish">finish()</button>
+          <button id="button_reset">reset()</button>
+        </div>
+      </div>
+    </section>
+  </section>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="../dist/jquery-asPieProgress.js"></script>
+  <script type="text/javascript">
+    jQuery(function($) {
+      $('.pie_progress').asPieProgress({
+        namespace: 'pie_progress'
+      });
+      // Example with grater loading time - loads longer
+      $('.pie_progress--slow').asPieProgress({
+        namespace: 'pie_progress',
+        goal: 1000,
+        min: 0,
+        max: 1000,
+        speed: 200,
+        easing: 'linear'
+      });
+      // Example with grater loading time - loads longer
+      $('.pie_progress--countdown').asPieProgress({
+        namespace: 'pie_progress',
+        easing: 'linear',
+        first: 120,
+        max: 120,
+        goal: 0,
+        speed: 1200, // 120 s * 1000 ms per s / 100
+        numberCallback: function(n) {
+          var minutes = Math.floor(this.now / 60);
+          var seconds = this.now % 60;
+          if (seconds < 10) {
+            seconds = '0' + seconds;
+          }
+          return minutes + ': ' + seconds;
+        }
+      });
+      $('#button_start').on('click', function() {
+        $('.pie_progress').asPieProgress('start');
+      });
+      $('#button_finish').on('click', function() {
+        $('.pie_progress').asPieProgress('finish');
+      });
+      $('#button_go').on('click', function() {
+        $('.pie_progress').asPieProgress('go', 50);
+      });
+      $('#button_go_percentage').on('click', function() {
+        $('.pie_progress').asPieProgress('go', '50%');
+      });
+      $('#button_stop').on('click', function() {
+        $('.pie_progress').asPieProgress('stop');
+      });
+      $('#button_reset').on('click', function() {
+        $('.pie_progress').asPieProgress('reset');
+      });
+    });
+  </script>
+</body>
+</html>

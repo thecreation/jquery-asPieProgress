@@ -3,9 +3,11 @@
   position: relative;
   text-align: center;
   transform-style: preserve-3d;
+
   svg {
     margin: 0 auto;
   }
+
   &__content,
   &__number,
   &__label,
@@ -23,10 +25,12 @@
   &__number {
     font-size: 42px;
   }
+
   &__label {
     margin-top: 32px;
     font-size: 12px;
   }
+
   &__svg {
     position: relative;
     display: inline-block;
@@ -34,10 +38,13 @@
     padding-bottom: 100%;
     overflow: hidden;
     vertical-align: middle;
+
     svg {
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
       display: inline-block;
     }
   }

@@ -1,10 +1,9 @@
 /**
-* jQuery asPieProgress
-* A jQuery plugin that animate the progress bar
-* Compiled: Fri Sep 02 2016 14:07:00 GMT+0800 (CST)
-* @version v0.3.4
-* @link https://github.com/amazingSurge/jquery-asPieProgress
-* @copyright LGPL-3.0
+* jQuery asPieProgress v0.3.4
+* https://github.com/amazingSurge/jquery-asPieProgress
+*
+* Copyright (c) amazingSurge
+* Released under the LGPL-3.0 license
 */
 .pie_progress {
   position: relative;
@@ -48,5 +47,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  display: inline-block;
+  display: inline-block; 
+  width: 100%;
+  height: 100%;
 }
