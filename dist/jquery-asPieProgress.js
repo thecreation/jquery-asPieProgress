@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.1
+* jQuery asPieProgress v0.4.2
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -247,7 +247,7 @@
       contentCallback: null
     };
 
-    var NAME$1 = 'asPieProgress';
+    var NAMESPACE$1 = 'asPieProgress';
 
     var asPieProgress = function() {
       function asPieProgress(element, options) {
@@ -257,7 +257,7 @@
         this.$element = (0, _jquery2.default)(element);
 
         this.options = _jquery2.default.extend({}, DEFAULTS, {
-          namespace: NAME$1
+          namespace: NAMESPACE$1
         }, options, this.$element.data());
         this.namespace = this.options.namespace;
 
@@ -428,7 +428,7 @@
           var data = [this].concat(args);
 
           // event
-          this.$element.trigger(NAME$1 + '::' + eventType, data);
+          this.$element.trigger(NAMESPACE$1 + '::' + eventType, data);
 
           // callback
           eventType = eventType.replace(/\b\w+\b/g,
@@ -580,7 +580,7 @@
       }, {
         key: 'destory',
         value: function destory() {
-          this.$element.data(NAME$1, null);
+          this.$element.data(NAMESPACE$1, null);
           this._trigger('destory');
         }
       }], [{
@@ -608,13 +608,13 @@
     }();
 
     var info = {
-      version: '0.4.1'
+      version: '0.4.2'
     };
 
-    var NAME = 'asPieProgress';
+    var NAMESPACE = 'asPieProgress';
     var OtherAsPieProgress = _jquery2.default.fn.asPieProgress;
 
-    _jquery2.default.fn.asPieProgress = function jQueryAsPieProgress(options) {
+    var jQueryAsPieProgress = function jQueryAsPieProgress(options) {
       var _this = this;
 
       for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
@@ -631,7 +631,7 @@
               v: false
             };
           } else if (/^(get)/.test(method)) {
-            var instance = _this.first().data(NAME);
+            var instance = _this.first().data(NAMESPACE);
 
             if (instance && typeof instance[method] === 'function') {
 
@@ -645,7 +645,7 @@
               v: _this.each(
 
                 function() {
-                  var instance = _jquery2.default.data(this, NAME);
+                  var instance = _jquery2.default.data(this, NAMESPACE);
 
                   if (instance && typeof instance[method] === 'function') {
                     instance[method].apply(instance, args);
@@ -664,13 +664,14 @@
       return this.each(
 
         function() {
-          if (!(0, _jquery2.default)(this).data(NAME)) {
-            (0, _jquery2.default)(this).data(NAME, new asPieProgress(this, options));
+          if (!(0, _jquery2.default)(this).data(NAMESPACE)) {
+            (0, _jquery2.default)(this).data(NAMESPACE, new asPieProgress(this, options));
           }
         }
       );
-    }
-    ;
+    };
+
+    _jquery2.default.fn.asPieProgress = jQueryAsPieProgress;
 
     _jquery2.default.asPieProgress = _jquery2.default.extend({
       setDefaults: asPieProgress.setDefaults,
@@ -679,7 +680,7 @@
       noConflict: function noConflict() {
         _jquery2.default.fn.asPieProgress = OtherAsPieProgress;
 
-        return this;
+        return jQueryAsPieProgress;
       }
     }, info);
   }

@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.1
+* jQuery asPieProgress v0.4.2
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -73,29 +73,29 @@ const svgSupported = 'createElementNS' in document && new SvgElement('svg', {}).
 const easingBezier = (mX1, mY1, mX2, mY2) => {
   'use strict';
 
-  let a = (aA1, aA2) => {
+  const a = (aA1, aA2) => {
     return 1.0 - 3.0 * aA2 + 3.0 * aA1;
   };
 
-  let b = (aA1, aA2) => {
+  const b = (aA1, aA2) => {
     return 3.0 * aA2 - 6.0 * aA1;
   };
 
-  let c = (aA1) => {
+  const c = (aA1) => {
     return 3.0 * aA1;
   };
 
   // Returns x(t) given t, x1, and x2, or y(t) given t, y1, and y2.
-  let calcBezier = (aT, aA1, aA2) => {
+  const calcBezier = (aT, aA1, aA2) => {
     return ((a(aA1, aA2) * aT + b(aA1, aA2)) * aT + c(aA1)) * aT;
   };
 
   // Returns dx/dt given t, x1, and x2, or dy/dt given t, y1, and y2.
-  let getSlope = (aT, aA1, aA2) => {
+  const getSlope = (aT, aA1, aA2) => {
     return 3.0 * a(aA1, aA2) * aT * aT + 2.0 * b(aA1, aA2) * aT + c(aA1);
   };
 
-  let getTForX = (aX) => {
+  const getTForX = (aX) => {
     // Newton raphson iteration
     let aGuessT = aX;
     for (let i = 0; i < 4; ++i) {
@@ -160,14 +160,14 @@ var DEFAULTS = {
   contentCallback: null
 };
 
-const NAME$1 = 'asPieProgress';
+const NAMESPACE$1 = 'asPieProgress';
 
 class asPieProgress {
   constructor(element, options) {
     this.element = element;
     this.$element = $(element);
 
-    this.options = $.extend({}, DEFAULTS, {namespace: NAME$1}, options, this.$element.data());
+    this.options = $.extend({}, DEFAULTS, {namespace: NAMESPACE$1}, options, this.$element.data());
     this.namespace = this.options.namespace;
 
     this.classes = this.options.classes;
@@ -320,7 +320,7 @@ class asPieProgress {
     const data = [this].concat(args);
 
     // event
-    this.$element.trigger(`${NAME$1}::${eventType}`, data);
+    this.$element.trigger(`${NAMESPACE$1}::${eventType}`, data);
 
     // callback
     eventType = eventType.replace(/\b\w+\b/g, word => word.substring(0, 1).toUpperCase() + word.substring(1));
@@ -451,7 +451,7 @@ class asPieProgress {
   }
 
   destory() {
-    this.$element.data(NAME$1, null);
+    this.$element.data(NAMESPACE$1, null);
     this._trigger('destory');
   }
 
@@ -469,26 +469,26 @@ class asPieProgress {
 }
 
 var info = {
-  version:'0.4.1'
+  version:'0.4.2'
 };
 
-const NAME = 'asPieProgress';
+const NAMESPACE = 'asPieProgress';
 const OtherAsPieProgress = $.fn.asPieProgress;
 
-$.fn.asPieProgress = function jQueryAsPieProgress(options, ...args) {
+const jQueryAsPieProgress = function(options, ...args) {
   if (typeof options === 'string') {
     let method = options;
 
     if (/^_/.test(method)) {
       return false;
     } else if ((/^(get)/.test(method))) {
-      let instance = this.first().data(NAME);
+      let instance = this.first().data(NAMESPACE);
       if (instance && typeof instance[method] === 'function') {
         return instance[method](...args);
       }
     } else {
       return this.each(function() {
-        let instance = $.data(this, NAME);
+        let instance = $.data(this, NAMESPACE);
         if (instance && typeof instance[method] === 'function') {
           instance[method](...args);
         }
@@ -497,11 +497,13 @@ $.fn.asPieProgress = function jQueryAsPieProgress(options, ...args) {
   }
 
   return this.each(function() {
-    if (!$(this).data(NAME)) {
-      $(this).data(NAME, new asPieProgress(this, options));
+    if (!$(this).data(NAMESPACE)) {
+      $(this).data(NAMESPACE, new asPieProgress(this, options));
     }
   });
 };
+
+$.fn.asPieProgress = jQueryAsPieProgress;
 
 $.asPieProgress = $.extend({
   setDefaults: asPieProgress.setDefaults,
@@ -509,6 +511,6 @@ $.asPieProgress = $.extend({
   getEasing: asPieProgress.getEasing,
   noConflict: function() {
     $.fn.asPieProgress = OtherAsPieProgress;
-    return this;
+    return jQueryAsPieProgress;
   }
 }, info);

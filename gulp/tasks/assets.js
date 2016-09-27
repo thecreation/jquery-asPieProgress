@@ -44,7 +44,7 @@ export function copy(options = config.assets, message = 'Assets task complete') 
   }
 }
 
-export function clean(options = config.assets, message = 'Assets task complete') {
+export function clean(options = config.assets, message = 'Assets clean task complete') {
   return function (done) {
     let pkgName = getPackage();
     const manager = new AssetsManager('manifest.json', options);

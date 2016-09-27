@@ -2,23 +2,23 @@ import $ from 'jquery';
 import asPieProgress from './asPieProgress';
 import info from './info';
 
-const NAME = 'asPieProgress';
+const NAMESPACE = 'asPieProgress';
 const OtherAsPieProgress = $.fn.asPieProgress;
 
-$.fn.asPieProgress = function jQueryAsPieProgress(options, ...args) {
+const jQueryAsPieProgress = function(options, ...args) {
   if (typeof options === 'string') {
     let method = options;
 
     if (/^_/.test(method)) {
       return false;
     } else if ((/^(get)/.test(method))) {
-      let instance = this.first().data(NAME);
+      let instance = this.first().data(NAMESPACE);
       if (instance && typeof instance[method] === 'function') {
         return instance[method](...args);
       }
     } else {
       return this.each(function() {
-        let instance = $.data(this, NAME);
+        let instance = $.data(this, NAMESPACE);
         if (instance && typeof instance[method] === 'function') {
           instance[method](...args);
         }
@@ -27,11 +27,13 @@ $.fn.asPieProgress = function jQueryAsPieProgress(options, ...args) {
   }
 
   return this.each(function() {
-    if (!$(this).data(NAME)) {
-      $(this).data(NAME, new asPieProgress(this, options));
+    if (!$(this).data(NAMESPACE)) {
+      $(this).data(NAMESPACE, new asPieProgress(this, options));
     }
   });
 };
+
+$.fn.asPieProgress = jQueryAsPieProgress;
 
 $.asPieProgress = $.extend({
   setDefaults: asPieProgress.setDefaults,
@@ -39,6 +41,6 @@ $.asPieProgress = $.extend({
   getEasing: asPieProgress.getEasing,
   noConflict: function() {
     $.fn.asPieProgress = OtherAsPieProgress;
-    return this;
+    return jQueryAsPieProgress;
   }
 }, info);

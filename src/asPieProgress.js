@@ -5,14 +5,14 @@ import easingBezier from './easingBezier';
 import EASING from './easing';
 import DEFAULTS from './defaults';
 
-const NAME = 'asPieProgress';
+const NAMESPACE = 'asPieProgress';
 
 class asPieProgress {
   constructor(element, options) {
     this.element = element;
     this.$element = $(element);
 
-    this.options = $.extend({}, DEFAULTS, {namespace: NAME}, options, this.$element.data());
+    this.options = $.extend({}, DEFAULTS, {namespace: NAMESPACE}, options, this.$element.data());
     this.namespace = this.options.namespace;
 
     this.classes = this.options.classes;
@@ -165,7 +165,7 @@ class asPieProgress {
     const data = [this].concat(args);
 
     // event
-    this.$element.trigger(`${NAME}::${eventType}`, data);
+    this.$element.trigger(`${NAMESPACE}::${eventType}`, data);
 
     // callback
     eventType = eventType.replace(/\b\w+\b/g, word => word.substring(0, 1).toUpperCase() + word.substring(1));
@@ -296,7 +296,7 @@ class asPieProgress {
   }
 
   destory() {
-    this.$element.data(NAME, null);
+    this.$element.data(NAMESPACE, null);
     this._trigger('destory');
   }
 
