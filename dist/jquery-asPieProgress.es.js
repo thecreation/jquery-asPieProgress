@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.2
+* jQuery asPieProgress v0.4.3
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -135,7 +135,7 @@ var EASING = {
 };
 
 var DEFAULTS = {
-  namespace: '',
+  namespace: 'asPieProgress',
   classes: {
     svg: 'pie_progress__svg',
     element: 'pie_progress',
@@ -167,7 +167,7 @@ class asPieProgress {
     this.element = element;
     this.$element = $(element);
 
-    this.options = $.extend({}, DEFAULTS, {namespace: NAMESPACE$1}, options, this.$element.data());
+    this.options = $.extend(true, {}, DEFAULTS, options, this.$element.data());
     this.namespace = this.options.namespace;
 
     this.classes = this.options.classes;
@@ -469,7 +469,7 @@ class asPieProgress {
 }
 
 var info = {
-  version:'0.4.2'
+  version:'0.4.3'
 };
 
 const NAMESPACE = 'asPieProgress';
@@ -477,18 +477,18 @@ const OtherAsPieProgress = $.fn.asPieProgress;
 
 const jQueryAsPieProgress = function(options, ...args) {
   if (typeof options === 'string') {
-    let method = options;
+    const method = options;
 
     if (/^_/.test(method)) {
       return false;
     } else if ((/^(get)/.test(method))) {
-      let instance = this.first().data(NAMESPACE);
+      const instance = this.first().data(NAMESPACE);
       if (instance && typeof instance[method] === 'function') {
         return instance[method](...args);
       }
     } else {
       return this.each(function() {
-        let instance = $.data(this, NAMESPACE);
+        const instance = $.data(this, NAMESPACE);
         if (instance && typeof instance[method] === 'function') {
           instance[method](...args);
         }

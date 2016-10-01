@@ -1,5 +1,5 @@
 export default {
-  namespace: '',
+  namespace: 'asPieProgress',
   classes: {
     svg: 'pie_progress__svg',
     element: 'pie_progress',

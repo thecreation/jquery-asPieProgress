@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.2
+* jQuery asPieProgress v0.4.3
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -219,7 +219,7 @@
     };
 
     var DEFAULTS = {
-      namespace: '',
+      namespace: 'asPieProgress',
       classes: {
         svg: 'pie_progress__svg',
         element: 'pie_progress',
@@ -256,9 +256,7 @@
         this.element = element;
         this.$element = (0, _jquery2.default)(element);
 
-        this.options = _jquery2.default.extend({}, DEFAULTS, {
-          namespace: NAMESPACE$1
-        }, options, this.$element.data());
+        this.options = _jquery2.default.extend(true, {}, DEFAULTS, options, this.$element.data());
         this.namespace = this.options.namespace;
 
         this.classes = this.options.classes;
@@ -608,7 +606,7 @@
     }();
 
     var info = {
-      version: '0.4.2'
+      version: '0.4.3'
     };
 
     var NAMESPACE = 'asPieProgress';

@@ -7,18 +7,18 @@ const OtherAsPieProgress = $.fn.asPieProgress;
 
 const jQueryAsPieProgress = function(options, ...args) {
   if (typeof options === 'string') {
-    let method = options;
+    const method = options;
 
     if (/^_/.test(method)) {
       return false;
     } else if ((/^(get)/.test(method))) {
-      let instance = this.first().data(NAMESPACE);
+      const instance = this.first().data(NAMESPACE);
       if (instance && typeof instance[method] === 'function') {
         return instance[method](...args);
       }
     } else {
       return this.each(function() {
-        let instance = $.data(this, NAMESPACE);
+        const instance = $.data(this, NAMESPACE);
         if (instance && typeof instance[method] === 'function') {
           instance[method](...args);
         }

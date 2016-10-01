@@ -12,7 +12,7 @@ class asPieProgress {
     this.element = element;
     this.$element = $(element);
 
-    this.options = $.extend({}, DEFAULTS, {namespace: NAMESPACE}, options, this.$element.data());
+    this.options = $.extend(true, {}, DEFAULTS, options, this.$element.data());
     this.namespace = this.options.namespace;
 
     this.classes = this.options.classes;
