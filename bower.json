@@ -1,6 +1,6 @@
 {
   "name": "jquery-asPieProgress",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A jQuery plugin that animate the pie progress.",
   "main": "dist/jquery-asPieProgress.js",
   "copyright": "amazingSurge",
