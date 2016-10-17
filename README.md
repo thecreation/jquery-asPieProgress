@@ -46,6 +46,11 @@ bower install jquery-asPieProgress --save
 npm install jquery-asPieProgress --save
 ```
 
+#### Install From Yarn
+```sh
+yarn add jquery-asPieProgress
+```
+
 #### Build From Source
 If you want build from source:
 
@@ -189,11 +194,11 @@ Event   | Description
 ------- | -----------
 init    | Fires when the instance is setup for the first time.
 ready   | Fires when the instance is ready for API use.
-start   | This event is fired immediately when the `start` instance method has been called.
-stop    | This event is fired immediately when the `stop` instance method has been called.
+start   | Fired when the `start` instance method has been called.
+stop    | Fired when the `stop` instance method has been called.
 update  | Fires when the progress value is changing. 
 finish  | Fires when the animation is finished, Or the `finish` instance method has been called.
-reset   | This event is fired immediately when the `reset` instance method has been called.
+reset   | Fired when the `reset` instance method has been called.
 destroy | Fires when an instance is destroyed. 
 
 ## No conflict

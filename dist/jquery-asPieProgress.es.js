@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.4
+* jQuery asPieProgress v0.4.5
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -316,17 +316,20 @@ class asPieProgress {
     this.bar.style.strokeDashoffset = offset;
   }
 
-  _trigger(eventType, ...args) {
-    const data = [this].concat(args);
+  _trigger(eventType, ...params) {
+    const data = [this].concat(params);
 
     // event
     this.$element.trigger(`${NAMESPACE$1}::${eventType}`, data);
 
     // callback
-    eventType = eventType.replace(/\b\w+\b/g, word => word.substring(0, 1).toUpperCase() + word.substring(1));
+    eventType = eventType.replace(/\b\w+\b/g, (word) => {
+      return word.substring(0, 1).toUpperCase() + word.substring(1);
+    });
     const onFunction = `on${eventType}`;
+
     if (typeof this.options[onFunction] === 'function') {
-      this.options[onFunction](args);
+      this.options[onFunction].apply(this, params);
     }
   }
 
@@ -450,9 +453,9 @@ class asPieProgress {
     this._trigger('finish');
   }
 
-  destory() {
+  destroy() {
     this.$element.data(NAMESPACE$1, null);
-    this._trigger('destory');
+    this._trigger('destroy');
   }
 
   static registerEasing(name, ...args) {
@@ -469,7 +472,7 @@ class asPieProgress {
 }
 
 var info = {
-  version:'0.4.4'
+  version:'0.4.5'
 };
 
 const NAMESPACE = 'asPieProgress';

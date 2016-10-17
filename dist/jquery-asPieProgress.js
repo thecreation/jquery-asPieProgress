@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.4
+* jQuery asPieProgress v0.4.5
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -419,11 +419,11 @@
       }, {
         key: '_trigger',
         value: function _trigger(eventType) {
-          for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-            args[_key - 1] = arguments[_key];
+          for (var _len = arguments.length, params = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+            params[_key - 1] = arguments[_key];
           }
 
-          var data = [this].concat(args);
+          var data = [this].concat(params);
 
           // event
           this.$element.trigger(NAMESPACE$1 + '::' + eventType, data);
@@ -438,7 +438,7 @@
           var onFunction = 'on' + eventType;
 
           if (typeof this.options[onFunction] === 'function') {
-            this.options[onFunction](args);
+            this.options[onFunction].apply(this, params);
           }
         }
       }, {
@@ -576,10 +576,10 @@
           this._trigger('finish');
         }
       }, {
-        key: 'destory',
-        value: function destory() {
+        key: 'destroy',
+        value: function destroy() {
           this.$element.data(NAMESPACE$1, null);
-          this._trigger('destory');
+          this._trigger('destroy');
         }
       }], [{
         key: 'registerEasing',
@@ -606,7 +606,7 @@
     }();
 
     var info = {
-      version: '0.4.4'
+      version: '0.4.5'
     };
 
     var NAMESPACE = 'asPieProgress';
