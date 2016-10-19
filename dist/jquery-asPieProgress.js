@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.5
+* jQuery asPieProgress v0.4.6
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -38,7 +38,7 @@
       :
 
       function(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
       };
 
     function _classCallCheck(instance, Constructor) {
@@ -110,7 +110,7 @@
       window.cancelAnimationFrame = window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame'];
     }
 
-    if (/iP(ad|hone|od).*OS (6|7)/.test(window.navigator.userAgent) // iOS6 is buggy
+    if (/iP(ad|hone|od).*OS (6|7|8)/.test(window.navigator.userAgent) // iOS6 is buggy
       || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
       (function() {
         var lastTime = 0;
@@ -606,7 +606,7 @@
     }();
 
     var info = {
-      version: '0.4.5'
+      version: '0.4.6'
     };
 
     var NAMESPACE = 'asPieProgress';

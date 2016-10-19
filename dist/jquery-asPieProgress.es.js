@@ -1,5 +1,5 @@
 /**
-* jQuery asPieProgress v0.4.5
+* jQuery asPieProgress v0.4.6
 * https://github.com/amazingSurge/jquery-asPieProgress
 *
 * Copyright (c) amazingSurge
@@ -29,7 +29,7 @@ if (!Date.now) {
   Date.now = () => {
     'use strict';
     return new Date().getTime();
-  }
+  };
 }
 
 const vendors = ['webkit', 'moz'];
@@ -39,7 +39,7 @@ for (let i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
   window.cancelAnimationFrame = (window[`${vp}CancelAnimationFrame`] || window[`${vp}CancelRequestAnimationFrame`]);
 }
 
-if (/iP(ad|hone|od).*OS (6|7)/.test(window.navigator.userAgent) // iOS6 is buggy
+if (/iP(ad|hone|od).*OS (6|7|8)/.test(window.navigator.userAgent) // iOS6 is buggy
   ||
   !window.requestAnimationFrame || !window.cancelAnimationFrame) {
   let lastTime = 0;
@@ -472,7 +472,7 @@ class asPieProgress {
 }
 
 var info = {
-  version:'0.4.5'
+  version:'0.4.6'
 };
 
 const NAMESPACE = 'asPieProgress';
