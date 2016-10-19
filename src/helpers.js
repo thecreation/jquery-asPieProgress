@@ -14,7 +14,7 @@ for (let i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
   window.cancelAnimationFrame = (window[`${vp}CancelAnimationFrame`] || window[`${vp}CancelRequestAnimationFrame`]);
 }
 
-if (/iP(ad|hone|od).*OS (6|7)/.test(window.navigator.userAgent) // iOS6 is buggy
+if (/iP(ad|hone|od).*OS (6|7|8)/.test(window.navigator.userAgent) // iOS6 is buggy
   ||
   !window.requestAnimationFrame || !window.cancelAnimationFrame) {
   let lastTime = 0;
